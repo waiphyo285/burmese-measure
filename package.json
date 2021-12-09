@@ -1,0 +1,20 @@
+{
+  "name": "burmese-measure",
+  "version": "1.0.0",
+  "description": "Burmese Measuring Units",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/waiphyo285/burmese-measure.git"
+  },
+  "keywords": [
+    "burmese",
+    "myanmar",
+    "measure"
+  ],
+  "author": "Wai Phyo",
+  "license": "ISC"
+}
