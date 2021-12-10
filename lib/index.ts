@@ -17,13 +17,20 @@ const $ = {
 };
 
 export class BurmeseMeasure {
+  public getAllToGram(): object {
+    let all: any = {};
+    all = Object.entries($.$gram).map(([key, value], idx: number) => {
+      return { value: { [key]: value }, unit: "g" };
+    });
+    return all;
+  }
   public convertYL2G(yl: number): number {
     /*
      * @param {number} yl
      * @return {number}
      */
     if (typeof yl === "number") {
-      return yl / $.$gram.$1yway_lay;
+      return yl * $.$gram.$1yway_lay;
     } else {
       throw new Error("NAN is found.");
     }
@@ -34,7 +41,29 @@ export class BurmeseMeasure {
      * @return {number}
      */
     if (typeof yg === "number") {
-      return yg / $.$gram.$1yway_gyi;
+      return yg * $.$gram.$1yway_gyi;
+    } else {
+      throw new Error("NAN is found.");
+    }
+  }
+  public convertPe2G(pe: number): number {
+    /*
+     * @param {number} pe
+     * @return {number}
+     */
+    if (typeof pe === "number") {
+      return pe * $.$gram.$1pae_thar;
+    } else {
+      throw new Error("NAN is found.");
+    }
+  }
+  public convertMu2G(mu: number): number {
+    /*
+     * @param {number} mu
+     * @return {number}
+     */
+    if (typeof mu === "number") {
+      return mu * $.$gram.$1mu_thar;
     } else {
       throw new Error("NAN is found.");
     }
@@ -45,7 +74,7 @@ export class BurmeseMeasure {
      * @return {number}
      */
     if (typeof mt === "number") {
-      return mt / $.$gram.$1mat_thar;
+      return mt * $.$gram.$1mat_thar;
     } else {
       throw new Error("NAN is found.");
     }
@@ -56,7 +85,7 @@ export class BurmeseMeasure {
      * @return {number}
      */
     if (typeof k === "number") {
-      return k / $.$gram.$1kyat_thar;
+      return k * $.$gram.$1kyat_thar;
     } else {
       throw new Error("NAN is found.");
     }
@@ -67,7 +96,25 @@ export class BurmeseMeasure {
      * @return {number}
      */
     if (typeof p === "number") {
-      return p / $.$gram.$1pate_thar;
+      return p * $.$gram.$1pate_thar;
+    } else {
+      throw new Error("NAN is found.");
+    }
+  }
+  public convertKP2G(k: number, p: number = 0): number {
+    /*
+     * @param {number} k
+     * @param {number} p
+     * @return {number} g
+     */
+    if (typeof (k + p) === "number") {
+      let [temp, gram] = [0, 0];
+      // convert pae to kyat and sum of total kyat
+      temp = k + (p > 0 ? p / 16 : 0);
+      // multiply kyat with 16.6, to get total gram
+      gram = temp * $.$gram.$1kyat_thar;
+      // return gram
+      return gram;
     } else {
       throw new Error("NAN is found.");
     }
@@ -97,7 +144,7 @@ export class BurmeseMeasure {
      * @return number
      */
     if (typeof g === "number") {
-      return g * $.$gram.$1yway_lay;
+      return g / $.$gram.$1yway_lay;
     } else {
       throw new Error("NAN is found.");
     }
@@ -108,7 +155,29 @@ export class BurmeseMeasure {
      * @return number
      */
     if (typeof g === "number") {
-      return g * $.$gram.$1yway_gyi;
+      return g / $.$gram.$1yway_gyi;
+    } else {
+      throw new Error("NAN is found.");
+    }
+  }
+  public convertG2Pe(g: number): number {
+    /*
+     * @param {number} g
+     * @return number
+     */
+    if (typeof g === "number") {
+      return g / $.$gram.$1pae_thar;
+    } else {
+      throw new Error("NAN is found.");
+    }
+  }
+  public convertG2Mu(g: number): number {
+    /*
+     * @param {number} g
+     * @return number
+     */
+    if (typeof g === "number") {
+      return g / $.$gram.$1mu_thar;
     } else {
       throw new Error("NAN is found.");
     }
@@ -119,7 +188,7 @@ export class BurmeseMeasure {
      * @return number
      */
     if (typeof g === "number") {
-      return g * $.$gram.$1mat_thar;
+      return g / $.$gram.$1mat_thar;
     } else {
       throw new Error("NAN is found.");
     }
@@ -130,7 +199,7 @@ export class BurmeseMeasure {
      * @return number
      */
     if (typeof g === "number") {
-      return g * $.$gram.$1kyat_thar;
+      return g / $.$gram.$1kyat_thar;
     } else {
       throw new Error("NAN is found.");
     }
@@ -141,8 +210,29 @@ export class BurmeseMeasure {
      * @return number
      */
     if (typeof g === "number") {
-      console.log(g);
-      return g * $.$gram.$1pate_thar;
+      return g / $.$gram.$1pate_thar;
+    } else {
+      throw new Error("NAN is found.");
+    }
+  }
+  public convertG2KP(g: number): number[] {
+    /*
+     * @param {number} g
+     * @return {number[]}
+     */
+    if (typeof g === "number") {
+      let [temp, kyat, pae] = [0, 0, 0];
+      temp = g / $.$gram.$1kyat_thar;
+      // check if integer
+      if (temp % 1 === 0) {
+        // return k,p,y
+        return [(kyat = temp), pae];
+      } else {
+        kyat = ~~temp; // get kyat value
+        temp = kyat > 0 ? (temp % kyat) * 16 : temp * 16;
+        // return k,p,y
+        return [kyat, (pae = temp)];
+      }
     } else {
       throw new Error("NAN is found.");
     }
