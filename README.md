@@ -17,7 +17,7 @@ To install `npm i burmese-measure` and can be `require` or `import` from your No
 
    // ES6
    import { BurmeseMeasure } from "burmese-measure";
-   const bmObj = new BMeasure();
+   const bmObj = new BurmeseMeasure();
    console.log("Gram to KPY :", bmObj.convertG2KPY(1213));
    // Gram to KPY : [ 7, 13, 6.651 ]
    console.log("KPY to Gram :", bmObj.convertKPY2G(7, 13, 6.65))
