@@ -37,7 +37,7 @@ var MassConvertor = /** @class */ (function (_super) {
         if (typeof value === "number") {
             var n_data = this.build(this.data, c_data);
             var n_setting = this.build(this.setting, c_setting);
-            return +(n_data["$1_".concat(n_setting.$to)] * value).toFixed(n_setting.$decimal);
+            return +(n_data[n_setting.to] * value).toFixed(n_setting.decimal);
         }
         else {
             throw new Error("NAN is found.");
@@ -49,7 +49,7 @@ var MassConvertor = /** @class */ (function (_super) {
         if (typeof value === "number") {
             var n_data = this.build(this.data, c_data);
             var n_setting = this.build(this.setting, c_setting);
-            return +(n_data["$1_".concat(n_setting.$from)] / value).toFixed(n_setting.$decimal);
+            return +(n_data[n_setting.from] / value).toFixed(n_setting.decimal);
         }
         else {
             throw new Error("NAN is found.");
@@ -64,8 +64,8 @@ var MassConvertor = /** @class */ (function (_super) {
             var n_data = this.build(this.data, c_data);
             var n_setting = this.build(this.setting, c_setting);
             temp = k + (p > 0 ? p / 16 : 0);
-            gram = temp * n_data.$1_kyat_thar;
-            return +gram.toFixed(n_setting.$decimal);
+            gram = temp * n_data.kyat_thar;
+            return +gram.toFixed(n_setting.decimal);
         }
         else {
             throw new Error("NAN is found.");
@@ -81,8 +81,8 @@ var MassConvertor = /** @class */ (function (_super) {
             var n_data = this.build(this.data, c_data);
             var n_setting = this.build(this.setting, c_setting);
             temp = k + (p > 0 ? p / 16 : 0) + (y > 0 ? y / 128 : 0);
-            gram = temp * n_data.$1_kyat_thar;
-            return +gram.toFixed(n_setting.$decimal);
+            gram = temp * n_data.kyat_thar;
+            return +gram.toFixed(n_setting.decimal);
         }
         else {
             throw new Error("NAN is found.");
@@ -95,14 +95,14 @@ var MassConvertor = /** @class */ (function (_super) {
             var _a = [0, 0, 0], temp = _a[0], kyat = _a[1], pae = _a[2];
             var n_data = this.build(this.data, c_data);
             var n_setting = this.build(this.setting, c_setting);
-            temp = g / n_data.$1_kyat_thar;
+            temp = g / n_data.kyat_thar;
             if (temp % 1 === 0) {
                 return [(kyat = temp), pae];
             }
             else {
                 kyat = ~~temp;
                 temp = kyat > 0 ? (temp % kyat) * 16 : temp * 16;
-                return [kyat, (pae = +temp.toFixed(n_setting.$decimal))];
+                return [kyat, (pae = +temp.toFixed(n_setting.decimal))];
             }
         }
         else {
@@ -116,7 +116,7 @@ var MassConvertor = /** @class */ (function (_super) {
             var _a = [0, 0, 0, 0], temp = _a[0], kyat = _a[1], pae = _a[2], yway = _a[3];
             var n_data = this.build(this.data, c_data);
             var n_setting = this.build(this.setting, c_setting);
-            temp = g / n_data.$1_kyat_thar;
+            temp = g / n_data.kyat_thar;
             if (temp % 1 === 0) {
                 return [(kyat = temp), pae, yway];
             }
@@ -125,7 +125,7 @@ var MassConvertor = /** @class */ (function (_super) {
                 temp = kyat > 0 ? (temp % kyat) * 16 : temp * 16;
                 pae = ~~temp;
                 temp = pae > 0 ? (temp % pae) * 8 : temp * 8;
-                return [kyat, pae, (yway = +temp.toFixed(n_setting.$decimal))];
+                return [kyat, pae, (yway = +temp.toFixed(n_setting.decimal))];
             }
         }
         else {
@@ -148,7 +148,7 @@ var LengthConvertor = /** @class */ (function (_super) {
         if (typeof value === "number") {
             var n_data = this.build(this.data, c_data);
             var n_setting = this.build(this.setting, c_setting);
-            return +(n_data["$1_".concat(n_setting.$to)] * value).toFixed(n_setting.$decimal);
+            return +(n_data[n_setting.to] * value).toFixed(n_setting.decimal);
         }
         else {
             throw new Error("NAN is found.");
@@ -160,7 +160,7 @@ var LengthConvertor = /** @class */ (function (_super) {
         if (typeof value === "number") {
             var n_data = this.build(this.data, c_data);
             var n_setting = this.build(this.setting, c_setting);
-            return +(n_data["$1_".concat(n_setting.$from)] / value).toFixed(n_setting.$decimal);
+            return +(n_data[n_setting.from] / value).toFixed(n_setting.decimal);
         }
         else {
             throw new Error("NAN is found.");
@@ -182,7 +182,7 @@ var VolumeConvertor = /** @class */ (function (_super) {
         if (typeof value === "number") {
             var n_data = this.build(this.data, c_data);
             var n_setting = this.build(this.setting, c_setting);
-            return +(n_data["$1_".concat(n_setting.$to)] * value).toFixed(n_setting.$decimal);
+            return +(n_data[n_setting.to] * value).toFixed(n_setting.decimal);
         }
         else {
             throw new Error("NAN is found.");
@@ -194,7 +194,7 @@ var VolumeConvertor = /** @class */ (function (_super) {
         if (typeof value === "number") {
             var n_data = this.build(this.data, c_data);
             var n_setting = this.build(this.setting, c_setting);
-            return +(n_data["$1_".concat(n_setting.$from)] / value).toFixed(n_setting.$decimal);
+            return +(n_data[n_setting.from] / value).toFixed(n_setting.decimal);
         }
         else {
             throw new Error("NAN is found.");
@@ -220,5 +220,4 @@ module.exports = {
     massConvertor: massConvertor,
     lengthConvertor: lengthConvertor,
     volumeConvertor: volumeConvertor,
-    moneyConvertor: moneyConvertor,
 };

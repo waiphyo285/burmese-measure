@@ -14,6 +14,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.exchangeUnit = void 0;
 var exchangeUnit = function (setting) {
     var n_setting = Object.assign({}, setting);
-    return __assign(__assign({}, n_setting), { $from: n_setting.$to, $to: n_setting.$from });
+    return __assign(__assign({}, n_setting), { from: n_setting.to, to: n_setting.from });
 };
 exports.exchangeUnit = exchangeUnit;

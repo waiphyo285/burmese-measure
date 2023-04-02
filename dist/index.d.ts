@@ -29,16 +29,9 @@ declare class VolumeConvertor extends Convertor {
     metric2Burmese(value: number, c_data?: Volume | any, c_setting?: Setting): number;
     burmese2Metric(value: number, c_data?: Volume | any, c_setting?: Setting): number;
 }
-declare class MoneyConvertor {
-    data: any;
-    setting: Setting;
-    constructor(data: UData, setting: Setting);
-    build(origin: any, modify: any): any;
-}
 declare const _default: {
     massConvertor: MassConvertor;
     lengthConvertor: LengthConvertor;
     volumeConvertor: VolumeConvertor;
-    moneyConvertor: MoneyConvertor;
 };
 export = _default;

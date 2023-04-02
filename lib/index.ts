@@ -44,11 +44,9 @@ class MassConvertor extends Convertor {
       let n_data = this.build(this.data, c_data);
       let n_setting = this.build(this.setting, c_setting);
 
-      return +(n_data[`$1_${n_setting.$to}`] * value).toFixed(
-        n_setting.$decimal
-      );
+      return +(n_data[n_setting.to] * value).toFixed(n_setting.decimal);
     } else {
-      throw new Error("NAN is found.");
+      throw new Error("Not a number.");
     }
   }
 
@@ -61,11 +59,9 @@ class MassConvertor extends Convertor {
       let n_data = this.build(this.data, c_data);
       let n_setting = this.build(this.setting, c_setting);
 
-      return +(n_data[`$1_${n_setting.$from}`] / value).toFixed(
-        n_setting.$decimal
-      );
+      return +(n_data[n_setting.from] / value).toFixed(n_setting.decimal);
     } else {
-      throw new Error("NAN is found.");
+      throw new Error("Not a number.");
     }
   }
 
@@ -81,10 +77,10 @@ class MassConvertor extends Convertor {
       let n_setting = this.build(this.setting, c_setting);
 
       temp = k + (p > 0 ? p / 16 : 0);
-      gram = temp * n_data.$1_kyat_thar;
-      return +gram.toFixed(n_setting.$decimal);
+      gram = temp * n_data.kyat_thar;
+      return +gram.toFixed(n_setting.decimal);
     } else {
-      throw new Error("NAN is found.");
+      throw new Error("Not a number.");
     }
   }
 
@@ -101,10 +97,10 @@ class MassConvertor extends Convertor {
       let n_setting = this.build(this.setting, c_setting);
 
       temp = k + (p > 0 ? p / 16 : 0) + (y > 0 ? y / 128 : 0);
-      gram = temp * n_data.$1_kyat_thar;
-      return +gram.toFixed(n_setting.$decimal);
+      gram = temp * n_data.kyat_thar;
+      return +gram.toFixed(n_setting.decimal);
     } else {
-      throw new Error("NAN is found.");
+      throw new Error("Not a number.");
     }
   }
 
@@ -118,17 +114,17 @@ class MassConvertor extends Convertor {
       let n_data = this.build(this.data, c_data);
       let n_setting = this.build(this.setting, c_setting);
 
-      temp = g / n_data.$1_kyat_thar;
+      temp = g / n_data.kyat_thar;
 
       if (temp % 1 === 0) {
         return [(kyat = temp), pae];
       } else {
         kyat = ~~temp;
         temp = kyat > 0 ? (temp % kyat) * 16 : temp * 16;
-        return [kyat, (pae = +temp.toFixed(n_setting.$decimal))];
+        return [kyat, (pae = +temp.toFixed(n_setting.decimal))];
       }
     } else {
-      throw new Error("NAN is found.");
+      throw new Error("Not a number.");
     }
   }
 
@@ -142,7 +138,7 @@ class MassConvertor extends Convertor {
       let n_data = this.build(this.data, c_data);
       let n_setting = this.build(this.setting, c_setting);
 
-      temp = g / n_data.$1_kyat_thar;
+      temp = g / n_data.kyat_thar;
 
       if (temp % 1 === 0) {
         return [(kyat = temp), pae, yway];
@@ -151,10 +147,10 @@ class MassConvertor extends Convertor {
         temp = kyat > 0 ? (temp % kyat) * 16 : temp * 16;
         pae = ~~temp;
         temp = pae > 0 ? (temp % pae) * 8 : temp * 8;
-        return [kyat, pae, (yway = +temp.toFixed(n_setting.$decimal))];
+        return [kyat, pae, (yway = +temp.toFixed(n_setting.decimal))];
       }
     } else {
-      throw new Error("NAN is found.");
+      throw new Error("Not a number.");
     }
   }
 }
@@ -177,11 +173,9 @@ class LengthConvertor extends Convertor {
       let n_data = this.build(this.data, c_data);
       let n_setting = this.build(this.setting, c_setting);
 
-      return +(n_data[`$1_${n_setting.$to}`] * value).toFixed(
-        n_setting.$decimal
-      );
+      return +(n_data[n_setting.to] * value).toFixed(n_setting.decimal);
     } else {
-      throw new Error("NAN is found.");
+      throw new Error("Not a number.");
     }
   }
 
@@ -194,11 +188,9 @@ class LengthConvertor extends Convertor {
       let n_data = this.build(this.data, c_data);
       let n_setting = this.build(this.setting, c_setting);
 
-      return +(n_data[`$1_${n_setting.$from}`] / value).toFixed(
-        n_setting.$decimal
-      );
+      return +(n_data[n_setting.from] / value).toFixed(n_setting.decimal);
     } else {
-      throw new Error("NAN is found.");
+      throw new Error("Not a number.");
     }
   }
 }
@@ -221,11 +213,9 @@ class VolumeConvertor extends Convertor {
       let n_data = this.build(this.data, c_data);
       let n_setting = this.build(this.setting, c_setting);
 
-      return +(n_data[`$1_${n_setting.$to}`] * value).toFixed(
-        n_setting.$decimal
-      );
+      return +(n_data[n_setting.to] * value).toFixed(n_setting.decimal);
     } else {
-      throw new Error("NAN is found.");
+      throw new Error("Not a number.");
     }
   }
 
@@ -238,11 +228,9 @@ class VolumeConvertor extends Convertor {
       let n_data = this.build(this.data, c_data);
       let n_setting = this.build(this.setting, c_setting);
 
-      return +(n_data[`$1_${n_setting.$from}`] / value).toFixed(
-        n_setting.$decimal
-      );
+      return +(n_data[n_setting.from] / value).toFixed(n_setting.decimal);
     } else {
-      throw new Error("NAN is found.");
+      throw new Error("Not a number.");
     }
   }
 }
@@ -270,5 +258,4 @@ export = {
   massConvertor,
   lengthConvertor,
   volumeConvertor,
-  moneyConvertor,
 };
