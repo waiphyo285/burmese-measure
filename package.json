@@ -1,6 +1,6 @@
 {
   "name": "burmese-measure",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "A convertion package for measurement of Burmese units and Metric system",
   "main": "dist/index.js",
   "scripts": {
