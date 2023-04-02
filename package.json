@@ -1,7 +1,7 @@
 {
   "name": "burmese-measure",
-  "version": "1.0.7",
-  "description": "Converting for Burmese measuring units",
+  "version": "1.0.9",
+  "description": "A convertion package for measurement of Burmese units and Metric system",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
