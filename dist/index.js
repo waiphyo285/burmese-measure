@@ -1,295 +1,223 @@
 "use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.BurmeseMeasure = void 0;
-var $ = {
-    $gram: {
-        $1yway_lay: 0.136077706,
-        $1yway_gyi: 0.272155412,
-        $1pae_thar: 1.020582833,
-        $1mu_thar: 2.041165665,
-        $1mat_thar: 4.08233133,
-        $5mue_thar: 8.16466266,
-        $1kyat_thar: 16.32932532,
-        $awat_thar: 204.1165665,
-        $aseit_thar: 408.233133,
-        $50seit_thar: 816.466266,
-        $1pate_thar: 1632.932532,
-        $100pate_thar: 163293.2532,
-        $1000pate_thar: 1632932.532,
-    },
-};
-var BurmeseMeasure = /** @class */ (function () {
-    function BurmeseMeasure() {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var constant_1 = require("./constant");
+var helpers_1 = require("./helpers");
+var Convertor = /** @class */ (function () {
+    function Convertor(data, setting) {
+        this.data = data;
+        this.setting = setting;
     }
-    BurmeseMeasure.prototype.getAllToGram = function () {
-        var all = {};
-        all = Object.entries($.$gram).map(function (_a, idx) {
-            var _b;
-            var key = _a[0], value = _a[1];
-            return { value: (_b = {}, _b[key] = value, _b), unit: "g" };
-        });
-        return all;
+    return Convertor;
+}());
+var MassConvertor = /** @class */ (function (_super) {
+    __extends(MassConvertor, _super);
+    function MassConvertor(data, setting) {
+        return _super.call(this, data, setting) || this;
+    }
+    MassConvertor.prototype.build = function (origin, modify) {
+        return Object.assign(origin, modify);
     };
-    BurmeseMeasure.prototype.convertYL2G = function (yl) {
-        /*
-         * @param {number} yl
-         * @return {number}
-         */
-        if (typeof yl === "number") {
-            return yl * $.$gram.$1yway_lay;
+    MassConvertor.prototype.metric2Burmese = function (value, c_data, c_setting) {
+        if (c_data === void 0) { c_data = this.data; }
+        if (c_setting === void 0) { c_setting = this.setting; }
+        if (typeof value === "number") {
+            var n_data = this.build(this.data, c_data);
+            var n_setting = this.build(this.setting, c_setting);
+            return +(n_data[n_setting.to] * value).toFixed(n_setting.decimal);
         }
         else {
             throw new Error("NAN is found.");
         }
     };
-    BurmeseMeasure.prototype.convertYG2G = function (yg) {
-        /*
-         * @param {number} yg
-         * @return {number}
-         */
-        if (typeof yg === "number") {
-            return yg * $.$gram.$1yway_gyi;
+    MassConvertor.prototype.burmese2Metric = function (value, c_data, c_setting) {
+        if (c_data === void 0) { c_data = this.data; }
+        if (c_setting === void 0) { c_setting = (0, helpers_1.exchangeUnit)(this.setting); }
+        if (typeof value === "number") {
+            var n_data = this.build(this.data, c_data);
+            var n_setting = this.build(this.setting, c_setting);
+            return +(n_data[n_setting.from] / value).toFixed(n_setting.decimal);
         }
         else {
             throw new Error("NAN is found.");
         }
     };
-    BurmeseMeasure.prototype.convertPe2G = function (pe) {
-        /*
-         * @param {number} pe
-         * @return {number}
-         */
-        if (typeof pe === "number") {
-            return pe * $.$gram.$1pae_thar;
-        }
-        else {
-            throw new Error("NAN is found.");
-        }
-    };
-    BurmeseMeasure.prototype.convertMu2G = function (mu) {
-        /*
-         * @param {number} mu
-         * @return {number}
-         */
-        if (typeof mu === "number") {
-            return mu * $.$gram.$1mu_thar;
-        }
-        else {
-            throw new Error("NAN is found.");
-        }
-    };
-    BurmeseMeasure.prototype.convertMt2G = function (mt) {
-        /*
-         * @param {number} mt
-         * @return {number}
-         */
-        if (typeof mt === "number") {
-            return mt * $.$gram.$1mat_thar;
-        }
-        else {
-            throw new Error("NAN is found.");
-        }
-    };
-    BurmeseMeasure.prototype.convertK2G = function (k) {
-        /*
-         * @param {number} k
-         * @return {number}
-         */
-        if (typeof k === "number") {
-            return k * $.$gram.$1kyat_thar;
-        }
-        else {
-            throw new Error("NAN is found.");
-        }
-    };
-    BurmeseMeasure.prototype.convertP2G = function (p) {
-        /*
-         * @param {number} p
-         * @return {number}
-         */
-        if (typeof p === "number") {
-            return p * $.$gram.$1pate_thar;
-        }
-        else {
-            throw new Error("NAN is found.");
-        }
-    };
-    BurmeseMeasure.prototype.convertKP2G = function (k, p) {
+    MassConvertor.prototype.kyatPae2Gram = function (k, p, c_data, c_setting) {
         if (p === void 0) { p = 0; }
-        /*
-         * @param {number} k
-         * @param {number} p
-         * @return {number} g
-         */
+        if (c_data === void 0) { c_data = this.data; }
+        if (c_setting === void 0) { c_setting = this.setting; }
         if (typeof (k + p) === "number") {
             var _a = [0, 0], temp = _a[0], gram = _a[1];
-            // convert pae to kyat and sum of total kyat
+            var n_data = this.build(this.data, c_data);
+            var n_setting = this.build(this.setting, c_setting);
             temp = k + (p > 0 ? p / 16 : 0);
-            // multiply kyat with 16.6, to get total gram
-            gram = temp * $.$gram.$1kyat_thar;
-            // return gram
-            return gram;
+            gram = temp * n_data.kyat_thar;
+            return +gram.toFixed(n_setting.decimal);
         }
         else {
             throw new Error("NAN is found.");
         }
     };
-    BurmeseMeasure.prototype.convertKPY2G = function (k, p, y) {
+    MassConvertor.prototype.kyatPaeYway2Gram = function (k, p, y, c_data, c_setting) {
         if (p === void 0) { p = 0; }
         if (y === void 0) { y = 0; }
-        /*
-         * @param {number} k
-         * @param {number} p
-         * @param {number} y
-         * @return {number} g
-         */
+        if (c_data === void 0) { c_data = this.data; }
+        if (c_setting === void 0) { c_setting = this.setting; }
         if (typeof (k + p + y) === "number") {
             var _a = [0, 0], temp = _a[0], gram = _a[1];
-            // convert pae to kyat, yway to kyat and sum of total kyat
+            var n_data = this.build(this.data, c_data);
+            var n_setting = this.build(this.setting, c_setting);
             temp = k + (p > 0 ? p / 16 : 0) + (y > 0 ? y / 128 : 0);
-            // multiply kyat with 16.6, to get total gram
-            gram = temp * $.$gram.$1kyat_thar;
-            // return gram
-            return gram;
+            gram = temp * n_data.kyat_thar;
+            return +gram.toFixed(n_setting.decimal);
         }
         else {
             throw new Error("NAN is found.");
         }
     };
-    BurmeseMeasure.prototype.convertG2YL = function (g) {
-        /*
-         * @param {number} g
-         * @return number
-         */
-        if (typeof g === "number") {
-            return g / $.$gram.$1yway_lay;
-        }
-        else {
-            throw new Error("NAN is found.");
-        }
-    };
-    BurmeseMeasure.prototype.convertG2YG = function (g) {
-        /*
-         * @param {number} g
-         * @return number
-         */
-        if (typeof g === "number") {
-            return g / $.$gram.$1yway_gyi;
-        }
-        else {
-            throw new Error("NAN is found.");
-        }
-    };
-    BurmeseMeasure.prototype.convertG2Pe = function (g) {
-        /*
-         * @param {number} g
-         * @return number
-         */
-        if (typeof g === "number") {
-            return g / $.$gram.$1pae_thar;
-        }
-        else {
-            throw new Error("NAN is found.");
-        }
-    };
-    BurmeseMeasure.prototype.convertG2Mu = function (g) {
-        /*
-         * @param {number} g
-         * @return number
-         */
-        if (typeof g === "number") {
-            return g / $.$gram.$1mu_thar;
-        }
-        else {
-            throw new Error("NAN is found.");
-        }
-    };
-    BurmeseMeasure.prototype.convertG2Mt = function (g) {
-        /*
-         * @param {number} g
-         * @return number
-         */
-        if (typeof g === "number") {
-            return g / $.$gram.$1mat_thar;
-        }
-        else {
-            throw new Error("NAN is found.");
-        }
-    };
-    BurmeseMeasure.prototype.convertG2K = function (g) {
-        /*
-         * @param {number} g
-         * @return number
-         */
-        if (typeof g === "number") {
-            return g / $.$gram.$1kyat_thar;
-        }
-        else {
-            throw new Error("NAN is found.");
-        }
-    };
-    BurmeseMeasure.prototype.convertG2P = function (g) {
-        /*
-         * @param {number} g
-         * @return number
-         */
-        if (typeof g === "number") {
-            return g / $.$gram.$1pate_thar;
-        }
-        else {
-            throw new Error("NAN is found.");
-        }
-    };
-    BurmeseMeasure.prototype.convertG2KP = function (g) {
-        /*
-         * @param {number} g
-         * @return {number[]}
-         */
+    MassConvertor.prototype.gram2KyatPae = function (g, c_data, c_setting) {
+        if (c_data === void 0) { c_data = this.data; }
+        if (c_setting === void 0) { c_setting = this.setting; }
         if (typeof g === "number") {
             var _a = [0, 0, 0], temp = _a[0], kyat = _a[1], pae = _a[2];
-            temp = g / $.$gram.$1kyat_thar;
-            // check if integer
+            var n_data = this.build(this.data, c_data);
+            var n_setting = this.build(this.setting, c_setting);
+            temp = g / n_data.kyat_thar;
             if (temp % 1 === 0) {
-                // return k,p,y
                 return [(kyat = temp), pae];
             }
             else {
-                kyat = ~~temp; // get kyat value
+                kyat = ~~temp;
                 temp = kyat > 0 ? (temp % kyat) * 16 : temp * 16;
-                // return k,p,y
-                return [kyat, (pae = temp)];
+                return [kyat, (pae = +temp.toFixed(n_setting.decimal))];
             }
         }
         else {
             throw new Error("NAN is found.");
         }
     };
-    BurmeseMeasure.prototype.convertG2KPY = function (g) {
-        /*
-         * @param {number} g
-         * @return {number[]}
-         */
+    MassConvertor.prototype.gram2KyatPaeYway = function (g, c_data, c_setting) {
+        if (c_data === void 0) { c_data = this.data; }
+        if (c_setting === void 0) { c_setting = this.setting; }
         if (typeof g === "number") {
             var _a = [0, 0, 0, 0], temp = _a[0], kyat = _a[1], pae = _a[2], yway = _a[3];
-            temp = g / $.$gram.$1kyat_thar;
-            // check if integer
+            var n_data = this.build(this.data, c_data);
+            var n_setting = this.build(this.setting, c_setting);
+            temp = g / n_data.kyat_thar;
             if (temp % 1 === 0) {
-                // return k,p,y
                 return [(kyat = temp), pae, yway];
             }
             else {
-                kyat = ~~temp; // get kyat value
+                kyat = ~~temp;
                 temp = kyat > 0 ? (temp % kyat) * 16 : temp * 16;
-                pae = ~~temp; // get pae value
+                pae = ~~temp;
                 temp = pae > 0 ? (temp % pae) * 8 : temp * 8;
-                // return k,p,y
-                return [kyat, pae, (yway = temp)];
+                return [kyat, pae, (yway = +temp.toFixed(n_setting.decimal))];
             }
         }
         else {
             throw new Error("NAN is found.");
         }
     };
-    return BurmeseMeasure;
+    return MassConvertor;
+}(Convertor));
+var LengthConvertor = /** @class */ (function (_super) {
+    __extends(LengthConvertor, _super);
+    function LengthConvertor(data, setting) {
+        return _super.call(this, data, setting) || this;
+    }
+    LengthConvertor.prototype.build = function (origin, modify) {
+        return Object.assign(origin, modify);
+    };
+    LengthConvertor.prototype.metric2Burmese = function (value, c_data, c_setting) {
+        if (c_data === void 0) { c_data = this.data; }
+        if (c_setting === void 0) { c_setting = this.setting; }
+        if (typeof value === "number") {
+            var n_data = this.build(this.data, c_data);
+            var n_setting = this.build(this.setting, c_setting);
+            return +(n_data[n_setting.to] * value).toFixed(n_setting.decimal);
+        }
+        else {
+            throw new Error("NAN is found.");
+        }
+    };
+    LengthConvertor.prototype.burmese2Metric = function (value, c_data, c_setting) {
+        if (c_data === void 0) { c_data = this.data; }
+        if (c_setting === void 0) { c_setting = (0, helpers_1.exchangeUnit)(this.setting); }
+        if (typeof value === "number") {
+            var n_data = this.build(this.data, c_data);
+            var n_setting = this.build(this.setting, c_setting);
+            return +(n_data[n_setting.from] / value).toFixed(n_setting.decimal);
+        }
+        else {
+            throw new Error("NAN is found.");
+        }
+    };
+    return LengthConvertor;
+}(Convertor));
+var VolumeConvertor = /** @class */ (function (_super) {
+    __extends(VolumeConvertor, _super);
+    function VolumeConvertor(data, setting) {
+        return _super.call(this, data, setting) || this;
+    }
+    VolumeConvertor.prototype.build = function (origin, modify) {
+        return Object.assign(origin, modify);
+    };
+    VolumeConvertor.prototype.metric2Burmese = function (value, c_data, c_setting) {
+        if (c_data === void 0) { c_data = this.data; }
+        if (c_setting === void 0) { c_setting = this.setting; }
+        if (typeof value === "number") {
+            var n_data = this.build(this.data, c_data);
+            var n_setting = this.build(this.setting, c_setting);
+            return +(n_data[n_setting.to] * value).toFixed(n_setting.decimal);
+        }
+        else {
+            throw new Error("NAN is found.");
+        }
+    };
+    VolumeConvertor.prototype.burmese2Metric = function (value, c_data, c_setting) {
+        if (c_data === void 0) { c_data = this.data; }
+        if (c_setting === void 0) { c_setting = (0, helpers_1.exchangeUnit)(this.setting); }
+        if (typeof value === "number") {
+            var n_data = this.build(this.data, c_data);
+            var n_setting = this.build(this.setting, c_setting);
+            return +(n_data[n_setting.from] / value).toFixed(n_setting.decimal);
+        }
+        else {
+            throw new Error("NAN is found.");
+        }
+    };
+    return VolumeConvertor;
+}(Convertor));
+var MoneyConvertor = /** @class */ (function () {
+    function MoneyConvertor(data, setting) {
+        this.data = data;
+        this.setting = setting;
+    }
+    MoneyConvertor.prototype.build = function (origin, modify) {
+        return Object.assign(origin, modify);
+    };
+    return MoneyConvertor;
 }());
-exports.BurmeseMeasure = BurmeseMeasure;
+var massConvertor = new MassConvertor(constant_1.default.$mass_data, constant_1.default.$mass_setting);
+var lengthConvertor = new LengthConvertor(constant_1.default.$length_data, constant_1.default.$length_setting);
+var volumeConvertor = new VolumeConvertor(constant_1.default.$volume_data, constant_1.default.$volume_setting);
+var moneyConvertor = new MoneyConvertor(constant_1.default.$money_data, constant_1.default.$money_setting);
+module.exports = {
+    massConvertor: massConvertor,
+    lengthConvertor: lengthConvertor,
+    volumeConvertor: volumeConvertor,
+};

@@ -1,10 +1,10 @@
 # burmese-measure
 
-This package can be simply used as conversion gram to burmese measuring units such as kyat, pae, yway, etc. It has been published as an example and is developing on more useful converting methods.
+This package can be used to convert from Burmese measuring units to metric system via vice versa.
+It is made here in order for simplicity of use for various metrics including mass, length, and volume. It has been published as an example and is developing on more useful converting methods.
 
 <p>
    <a href="https://www.npmjs.com/package/burmese-measure"><img alt="npm" src="https://img.shields.io/badge/npm-v1.0.7-blue?style=flat"></a>
-   <a href="https://npmcharts.com/compare/burmese-measure"><img alt="npm" src="https://img.shields.io/badge/downloads-1K/month-green?style=flat"></a>
    <a href="https://github.com/waiphyo285/burmese-measure/blob/main/LICENSE"><img alt="npm" src="https://img.shields.io/badge/license-MIT-blue?style=flat"></a>
 </p>
 
@@ -13,126 +13,56 @@ This package can be simply used as conversion gram to burmese measuring units su
 To install `npm i burmese-measure` and can be `require` or `import` from your Node.JS application.
 
 ```
-   // CommonJS
-   const { BurmeseMeasure } = require("burmese-measure");
-   const bmObj = new BurmeseMeasure();
-```
-
-```
-   console.log("All to Gram: ", bmObj.getAllToGram())
-   // All to Gram: [
-   //  { value: [ '$1yway_lay', 0.136077706 ], unit: 'g' },
-   //  { value: [ '$1yway_gyi', 0.272155412 ], unit: 'g' },
-   //  { value: [ '$1pae_thar', 1.020582833 ], unit: 'g' },
-   //  ...
-   // ]
-```
-
-```
-console.log("Gram to Yway Lay :", bmObj.convertG2YL(0.136077706));
-// Gram to Yway Lay : 1
-```
-
-```
-console.log("Gram to Yway Gyi :", bmObj.convertG2YG(0.272155412));
-// Gram to Yway Gyi : 1
-```
-
-```
-console.log("Gram to Pae Thar :", bmObj.convertG2Pe(1.020582833));
-// Gram to Pae Thar : 1
-```
-
-```
-console.log("Gram to Mu Thar :", bmObj.convertG2Mu(2.041165665));
-// Gram to Mu Thar : 1
-```
-
-```
-console.log("Gram to Mat Thar :", bmObj.convertG2Mt(4.08233133));
-// Gram to Mat Thar: 1
-```
-
-```
-console.log("Gram to Kyat Thar :", bmObj.convertG2K(16.32932532));
-// Gram to Kyat Thar : 1
-```
-
-```
-console.log("Gram to Pate Thar :", bmObj.convertG2P(1632.932532));
-// Gram to Pate Thar : 1
-```
-
-```
-console.log("Gram to Kyat, Pae :", bmObj.convertG2KP(128.42));
-// Gram to Kyat, Pae: [7, 13.830060932364347]
-```
-
-```
-console.log("Gram to Kyat, Pae, Yway :", bmObj.convertG2KPY(128.42));
-// Gram to KPY : [ 7, 13, 6.640487458914777 ]
-```
-
-```
-console.log("Yway Lay to Gram :", bmObj.convertYL2G(1));
-// Yway Lay to Gram : 0.136077706
-```
-
-```
-console.log("Yway Gyi to Gram :", bmObj.convertYG2G(1));
-// Yway Gyi to Gram : 0.272155412
-```
-
-```
-console.log("Pae Thar to Gram :", bmObj.convertYG2G(1));
-// Pae Thar to Gram : 1.020582833
-```
-
-```
-console.log("Mu Thar to Gram :", bmObj.convertYG2G(1));
-// Mu Thar to Gram : 2.041165665
-```
-
-```
-console.log("Mat Thar to Gram :", bmObj.convertMt2G(1));
-// Mat Thar to Gram : 4.08233133
-```
-
-```
-console.log("Kyat Thar to Gram :", bmObj.convertK2G(1));
-// Kyat Thar to Gram : 16.32932532
-```
-
-```
-console.log("Pate Thar to Gram :", bmObj.convertP2G(1));
-// Pate Thar to Gram : 1632.932532
-```
-
-```
-console.log("Kyat, Pae to Gram :", bmObj.convertKP2G(7, 13.830060932364347));
-// Kyat, Pae, Yway to Gram : 128.42
-```
-
-```
-console.log("Kyat, Pae, Yway to Gram :", bmObj.convertKPY2G(7, 13, 6.640487458914777));
-// Kyat, Pae, Yway to Gram : 128.42
+// CommonJS
+const { massConvertor } = require("burmese-measure");
 ```
 
 ```
 // ES6
-import { BurmeseMeasure } from "burmese-measure";
-const bmObj = new BurmeseMeasure();
+import { massConvertor } from "burmese-measure";
 ```
 
-```
-console.log("Gram to Kyat, Pae, Yway :", bmObj.convertG2KPY(128.42));
-// Gram to Kyat, Pae, Yway : [ 7, 13, 6.640487458914777 ]
-```
+## Description
 
-```
-console.log("Kyat, Pae, Yway to Gram :", bmObj.convertKPY2G(7, 13, 6.640487458914777))
-// Kyat, Pae, Yway to Gram : 128.42
-```
+Beneath, you will find the following tables exhibiting the standard value in relation to Mass, Length & Volume.
+
+| Burmese unit        | Metric system (gram) |
+| ------------------- | -------------------- |
+| yway_lay            | 1.36078e-1           |
+| yway_gyi            | 2.72155e-1           |
+| pae_thar            | 1.02058              |
+| mu_thar             | 2.04117              |
+| mat_thar            | 4.08233              |
+| kyat_thar (default) | 16.3293              |
+| pate_thar           | 1632.93              |
+
+| Burmese unit  | Metric system (meter) |
+| ------------- | --------------------- |
+| sanchi        | 7.9375e-5             |
+| hnan          | 7.9375e-4             |
+| muyaw         | 4.7625e-3             |
+| let_thit      | 1.905e-2              |
+| maik          | 1.524e-1              |
+| htwa          | 2.286e-1              |
+| taung         | 4.572e-1              |
+| lan (default) | 1.8288                |
+| ta            | 3.2004                |
+| out_thaba     | 64.008                |
+| kawtha        | 1280.16               |
+| ga_wout       | 5120.64               |
+| yuzana        | 20482.56              |
+
+| Burmese unit  | Metric system (liter) |
+| ------------- | --------------------- |
+| la_myu        | 7.99118e-2            |
+| la_myet       | 1.59824e-1            |
+| la_me         | 3.19647e-1            |
+| sa_le         | 6.39294e-1            |
+| hkwet         | 1.27859               |
+| pyi (default) | 2.55718               |
+| seit          | 10.2287               |
+| hkwe          | 20.4574               |
+| tin           | 40.9148               |
 
 ## Contribution
 
@@ -140,7 +70,8 @@ Bug fixes and features are welcomed.
 
 ## References
 
-https://asian-recipe.com/burmese-measuring-system-2312
+- https://asian-recipe.com/burmese-measuring-system-2312
+- https://en.wikipedia.org/wiki/Myanmar_units_of_measurement
 
 ## License
 

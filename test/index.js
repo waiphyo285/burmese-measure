@@ -1,102 +1,72 @@
 // const mocha = require("mocha");
 const assert = require("assert");
-const { BurmeseMeasure } = require("../dist/index");
+const {
+  massConvertor,
+  lengthConvertor,
+  volumeConvertor,
+} = require("../dist/index");
 
-const bmObj = new BurmeseMeasure();
+describe("Burmese Measure: Mass Test \n", () => {
+  it("Checking metric2Burmese(1)", () => {
+    const job = massConvertor.metric2Burmese(1);
+    console.log("  Result: ", job);
+    assert.ok(job);
+  });
 
-describe("BurmeseMeasure", () => {
-  it("Checking getAllToGram()", () => {
-    const job = bmObj.getAllToGram();
+  it("Checking burmese2Metric(16.3293)", () => {
+    const job = massConvertor.burmese2Metric(16.3293);
     console.log("  Result: ", job);
     assert.ok(job);
   });
-  it("Checking convertG2YL(0.136077706)", () => {
-    const job = bmObj.convertG2YL(0.136077706);
+
+  it("Checking kyatPae2Gram(7, 13.830256)", () => {
+    const job = massConvertor.kyatPae2Gram(7, 13.830256);
     console.log("  Result: ", job);
     assert.ok(job);
   });
-  it("Checking convertG2YG(0.272155412)", () => {
-    const job = bmObj.convertG2YG(0.272155412);
+
+  it("Checking kyatPaeYway2Gram(7, 13, 6.642048)", () => {
+    const job = massConvertor.kyatPaeYway2Gram(7, 13, 6.642048);
     console.log("  Result: ", job);
     assert.ok(job);
   });
-  it("Checking convertG2Pe(1.020582833)", () => {
-    const job = bmObj.convertG2Pe(1.020582833);
+
+  it("Checking gram2KyatPae(128.42)", () => {
+    const job = massConvertor.gram2KyatPae(128.42);
     console.log("  Result: ", job);
     assert.ok(job);
   });
-  it("Checking convertG2Mu(2.041165665)", () => {
-    const job = bmObj.convertG2Mu(2.041165665);
+
+  it("Checking gram2KyatPaeYway(128.42)", () => {
+    const job = massConvertor.gram2KyatPaeYway(128.42);
     console.log("  Result: ", job);
     assert.ok(job);
   });
-  it("Checking convertG2Mt(4.08233133)", () => {
-    const job = bmObj.convertG2Mt(4.08233133);
+});
+
+describe("Burmese Measure: Length Test \n", () => {
+  it("Checking metric2Burmese(1)", () => {
+    const job = lengthConvertor.metric2Burmese(1);
     console.log("  Result: ", job);
     assert.ok(job);
   });
-  it("Checking convertG2K(16.32932532)", () => {
-    const job = bmObj.convertG2K(16.32932532);
+
+  it("Checking burmese2Metric(1.8288)", () => {
+    const job = lengthConvertor.burmese2Metric(1.8288);
     console.log("  Result: ", job);
     assert.ok(job);
   });
-  it("Checking convertG2P(1632.932532)", () => {
-    const job = bmObj.convertG2P(1632.932532);
+});
+
+describe("Burmese Measure: Volume Test \n", () => {
+  it("Checking metric2Burmese(1)", () => {
+    const job = volumeConvertor.metric2Burmese(1);
     console.log("  Result: ", job);
     assert.ok(job);
   });
-  it("Checking convertG2KP(128.42)", () => {
-    const job = bmObj.convertG2KP(128.42);
-    console.log("  Result: ", job);
-    assert.ok(job);
-  });
-  it("Checking convertG2KPY(128.42)", () => {
-    const job = bmObj.convertG2KPY(128.42);
-    console.log("  Result: ", job);
-    assert.ok(job);
-  });
-  it("Checking convertYL2G(1)", () => {
-    const job = bmObj.convertYL2G(1);
-    console.log("  Result: ", job);
-    assert.ok(job);
-  });
-  it("Checking convertYG2G(1)", () => {
-    const job = bmObj.convertYG2G(1);
-    console.log("  Result: ", job);
-    assert.ok(job);
-  });
-  it("Checking convertPe2G(1)", () => {
-    const job = bmObj.convertPe2G(1);
-    console.log("  Result: ", job);
-    assert.ok(job);
-  });
-  it("Checking convertMu2G(1)", () => {
-    const job = bmObj.convertMu2G(1);
-    console.log("  Result: ", job);
-    assert.ok(job);
-  });
-  it("Checking convertMt2G(1)", () => {
-    const job = bmObj.convertMt2G(1);
-    console.log("  Result: ", job);
-    assert.ok(job);
-  });
-  it("Checking convertK2G(1)", () => {
-    const job = bmObj.convertK2G(1);
-    console.log("  Result: ", job);
-    assert.ok(job);
-  });
-  it("Checking convertP2G(1)", () => {
-    const job = bmObj.convertP2G(1);
-    console.log("  Result: ", job);
-    assert.ok(job);
-  });
-  it("Checking convertKP2G(7, 13.830060932364347)", () => {
-    const job = bmObj.convertKP2G(7, 13.830060932364347);
-    console.log("  Result: ", job);
-    assert.ok(job);
-  });
-  it("Checking convertKPY2G(7, 13, 6.640487458914777)", () => {
-    const job = bmObj.convertKPY2G(7, 13, 6.640487458914777);
+
+  it("Checking burmese2Metric(2.55718)", () => {
+    const job = volumeConvertor.burmese2Metric(2.55718);
     console.log("  Result: ", job);
     assert.ok(job);
   });
