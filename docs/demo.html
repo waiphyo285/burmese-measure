@@ -1,539 +1,705 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Interactive demo for the Burmese Measure library - try converting between Burmese measurement units and the metric system"
-    />
-    <title>Burmese Measure - Demo</title>
-    <link rel="stylesheet" href="css/styles.css" />
-  </head>
-  <body>
-    <header class="header">
-      <a href="index.html" class="header-logo">Burmese Measure</a>
-      <nav class="header-nav">
-        <a href="index.html">Documentation</a>
-        <a href="demo.html" class="active">Demo</a>
-        <a href="https://github.com/waiphyo285/burmese-measure" target="_blank">GitHub</a>
-      </nav>
-    </header>
 
-    <div class="container">
-      <div
-        style="
-          background-color: #fff3cd;
-          color: #856404;
-          padding: 20px;
-          border-radius: 4px;
-          margin-bottom: 20px;
-        "
-      >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Interactive demo for the Burmese Measure library - try converting between Burmese measurement units and the metric system" />
+  <title>Burmese Measure - Demo</title>
+  <!-- Google Fonts - Quicksand -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <!-- Fira Code for code blocks -->
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Bootstrap 5.3.2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <!-- Custom styles -->
+  <style>
+    :root {
+      --primary-color: #4caf50;
+      --primary-dark: #3d8b40;
+      --primary-light: #a5d6a7;
+      --primary-bg: #f1f8e9;
+      --code-bg: #f5f7fa;
+      --dark-text: #2d3436;
+      --light-text: #636e72;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      color: var(--dark-text);
+      line-height: 1.7;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .navbar-brand {
+      font-weight: 600;
+    }
+
+    .navbar {
+      backdrop-filter: blur(10px);
+      background-color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .card {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      border: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    code {
+      color: var(--primary-dark);
+      background-color: rgba(76, 175, 80, 0.1);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+    }
+
+    .btn-success {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      border-radius: 8px;
+      font-weight: 500;
+      padding: 0.5rem 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-success:hover {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control,
+    .form-select {
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+      padding: 0.6rem 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+      border-color: var(--primary-light);
+      box-shadow: 0 0 0 0.25rem rgba(76, 175, 80, 0.25);
+    }
+
+    .card-header {
+      background-color: var(--primary-bg);
+      border-bottom: none;
+      font-weight: 600;
+    }
+
+    .result {
+      background-color: var(--code-bg);
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-family: 'Fira Code', 'Courier New', monospace;
+      color: var(--dark-text);
+      min-height: 2.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .error {
+      color: #dc3545;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Modern scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Bootstrap Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold text-success" href="index.html">Burmese Measure</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Documentation</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="demo.html">Demo</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/waiphyo285/burmese-measure" target="_blank">GitHub</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container py-5 mt-5">
+    <div class="alert alert-warning d-flex align-items-center" role="alert">
+      <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+      <div>
         <strong>Demo Mode:</strong> This is a simulation of the
         <code>burmese-measure</code> package. In a real application, you would import the actual
-        package using: <code> npm install burmese-measure</code>.
+        package using: <code>npm install burmese-measure</code>.
       </div>
+    </div>
 
+    <div class="row g-4">
       <!-- Mass Converter -->
-      <div class="converter">
-        <h2>Mass Converter</h2>
-        <div class="form-group">
-          <label for="mass-value">Value:</label>
-          <input type="number" id="mass-value" step="0.01" value="100" />
+      <div class="col-lg-6 col-xl-3">
+        <div class="card h-100">
+          <div class="card-header">
+            <h2 class="h5 mb-0">Mass Converter</h2>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="mass-value" class="form-label">Value:</label>
+              <input type="number" id="mass-value" class="form-control" step="0.01" value="100" />
+            </div>
+            <div class="mb-3">
+              <label for="mass-from" class="form-label">From:</label>
+              <select id="mass-from" class="form-select">
+                <option value="gram">Gram (g)</option>
+                <option value="kyatThar">Kyat</option>
+                <option value="paeThar">Pae</option>
+                <option value="ywayGyi">Yway</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="mass-to" class="form-label">To:</label>
+              <select id="mass-to" class="form-select">
+                <option value="kyatThar">Kyat</option>
+                <option value="gram">Gram (g)</option>
+                <option value="paeThar">Pae</option>
+                <option value="ywayGyi">Yway</option>
+              </select>
+            </div>
+            <button id="mass-convert" class="btn btn-success w-100">Convert</button>
+            <div class="result mt-3" id="mass-result"></div>
+            <div class="error" id="mass-error"></div>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="mass-from">From:</label>
-          <select id="mass-from">
-            <option value="gram">Gram (g)</option>
-            <option value="kyatThar">Kyat</option>
-            <option value="paeThar">Pae</option>
-            <option value="ywayGyi">Yway</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="mass-to">To:</label>
-          <select id="mass-to">
-            <option value="kyatThar">Kyat</option>
-            <option value="gram">Gram (g)</option>
-            <option value="paeThar">Pae</option>
-            <option value="ywayGyi">Yway</option>
-          </select>
-        </div>
-        <button id="mass-convert">Convert</button>
-        <div class="result" id="mass-result"></div>
       </div>
 
       <!-- Length Converter -->
-      <div class="converter">
-        <h2>Length Converter</h2>
-        <div class="form-group">
-          <label for="length-value">Value:</label>
-          <input type="number" id="length-value" step="0.01" value="1" />
+      <div class="col-lg-6 col-xl-3">
+        <div class="card h-100">
+          <div class="card-header">
+            <h2 class="h5 mb-0">Length Converter</h2>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="length-value" class="form-label">Value:</label>
+              <input type="number" id="length-value" class="form-control" step="0.01" value="1" />
+            </div>
+            <div class="mb-3">
+              <label for="length-from" class="form-label">From:</label>
+              <select id="length-from" class="form-select">
+                <option value="meter">Meter (m)</option>
+                <option value="taung">Taung</option>
+                <option value="lan">Lan</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="length-to" class="form-label">To:</label>
+              <select id="length-to" class="form-select">
+                <option value="taung">Taung</option>
+                <option value="meter">Meter (m)</option>
+                <option value="lan">Lan</option>
+              </select>
+            </div>
+            <button id="length-convert" class="btn btn-success w-100">Convert</button>
+            <div class="result mt-3" id="length-result"></div>
+            <div class="error" id="length-error"></div>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="length-from">From:</label>
-          <select id="length-from">
-            <option value="meter">Meter (m)</option>
-            <option value="taung">Taung</option>
-            <option value="lan">Lan</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="length-to">To:</label>
-          <select id="length-to">
-            <option value="taung">Taung</option>
-            <option value="meter">Meter (m)</option>
-            <option value="lan">Lan</option>
-          </select>
-        </div>
-        <button id="length-convert">Convert</button>
-        <div class="result" id="length-result"></div>
-        <div class="error" id="length-error" style="color: red; margin-top: 10px"></div>
       </div>
 
       <!-- Volume Converter -->
-      <div class="converter">
-        <h2>Volume Converter</h2>
-        <div class="form-group">
-          <label for="volume-value">Value:</label>
-          <input type="number" id="volume-value" step="0.01" value="1" />
+      <div class="col-lg-6 col-xl-3">
+        <div class="card h-100">
+          <div class="card-header">
+            <h2 class="h5 mb-0">Volume Converter</h2>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="volume-value" class="form-label">Value:</label>
+              <input type="number" id="volume-value" class="form-control" step="0.01" value="1" />
+            </div>
+            <div class="mb-3">
+              <label for="volume-from" class="form-label">From:</label>
+              <select id="volume-from" class="form-select">
+                <option value="liter">Liter (L)</option>
+                <option value="pyi">Pyi</option>
+                <option value="tin">Tin</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="volume-to" class="form-label">To:</label>
+              <select id="volume-to" class="form-select">
+                <option value="pyi">Pyi</option>
+                <option value="liter">Liter (L)</option>
+                <option value="tin">Tin</option>
+              </select>
+            </div>
+            <button id="volume-convert" class="btn btn-success w-100">Convert</button>
+            <div class="result mt-3" id="volume-result"></div>
+            <div class="error" id="volume-error"></div>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="volume-from">From:</label>
-          <select id="volume-from">
-            <option value="liter">Liter (L)</option>
-            <option value="pyi">Pyi</option>
-            <option value="tin">Tin</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="volume-to">To:</label>
-          <select id="volume-to">
-            <option value="pyi">Pyi</option>
-            <option value="liter">Liter (L)</option>
-            <option value="tin">Tin</option>
-          </select>
-        </div>
-        <button id="volume-convert">Convert</button>
-        <div class="result" id="volume-result"></div>
       </div>
 
       <!-- Money Converter -->
-      <div class="converter">
-        <h2>Money Converter</h2>
-        <div class="form-group">
-          <label for="money-kyat">Kyat:</label>
-          <input type="number" id="money-kyat" step="1" value="1000" />
+      <div class="col-lg-6 col-xl-3">
+        <div class="card h-100">
+          <div class="card-header">
+            <h2 class="h5 mb-0">Money Converter</h2>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="money-kyat" class="form-label">Kyat:</label>
+              <input type="number" id="money-kyat" class="form-control" step="1" value="1000" />
+            </div>
+            <div class="mb-3">
+              <label for="money-pya" class="form-label">Pya:</label>
+              <input type="number" id="money-pya" class="form-control" step="1" value="50" />
+            </div>
+            <div class="mb-3">
+              <label for="money-locale" class="form-label">Format Locale:</label>
+              <select id="money-locale" class="form-select">
+                <option value="my-MM">Myanmar (my-MM)</option>
+                <option value="en-US">English (en-US)</option>
+                <option value="th-TH">Thai (th-TH)</option>
+              </select>
+            </div>
+            <button id="money-convert" class="btn btn-success w-100">Format</button>
+            <div class="result mt-3" id="money-result"></div>
+            <div class="error" id="money-error"></div>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="money-pya">Pya:</label>
-          <input type="number" id="money-pya" step="1" value="50" />
-        </div>
-        <div class="form-group">
-          <label for="money-locale">Format Locale:</label>
-          <select id="money-locale">
-            <option value="my-MM">Myanmar (my-MM)</option>
-            <option value="en-US">English (en-US)</option>
-            <option value="th-TH">Thai (th-TH)</option>
-          </select>
-        </div>
-        <button id="money-convert">Format</button>
-        <div class="result" id="money-result"></div>
       </div>
     </div>
+  </div>
 
-    <div class="footer">
-      <div class="footer-links">
-        <a href="https://github.com/waiphyo285/burmese-measure" target="_blank">GitHub</a>
-        <a href="index.html">Documentation</a>
-        <a href="demo.html">Demo</a>
+  <footer class="border-top mt-5 py-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 text-center">
+          <div class="mb-3">
+            <a href="https://github.com/waiphyo285/burmese-measure" class="text-decoration-none text-success mx-2"
+              target="_blank">GitHub</a>
+            <a href="index.html" class="text-decoration-none text-success mx-2">Documentation</a>
+            <a href="demo.html" class="text-decoration-none text-success mx-2">Demo</a>
+          </div>
+          <p class="text-muted mb-0">© 2021-2025 Wai Phyo Naing</p>
+        </div>
       </div>
-      <p>© 2021-2025 Wai Phyo Naing</p>
     </div>
+  </footer>
 
-    <script type="module">
-      // In a real application, you would import from the npm package
-      // import { massConvertor, lengthConvertor, volumeConvertor, moneyConvertor } from 'burmese-measure';
+  <!-- Bootstrap JS Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-      // For demo purposes, we'll use a placeholder that simulates the package behavior
-      const simulatePackage = () => {
-        const formatNumber = (value, decimals = 6) => {
-          return Number(value.toFixed(decimals));
-        };
+  <script type="module">
+    // In a real application, you would import from the npm package
+    // import { massConvertor, lengthConvertor, volumeConvertor, moneyConvertor } from 'burmese-measure';
 
-        // Simulated conversion data
-        const massData = {
-          kyatThar: 16.3293,
-          paeThar: 1.02058,
-          ywayGyi: 0.272155,
-        };
-
-        const lengthData = {
-          taung: 0.4572,
-          lan: 1.8288,
-        };
-
-        const volumeData = {
-          pyi: 2.55718,
-          tin: 40.9148,
-        };
-
-        // Simulated converters with the new global settings approach
-        const massConvertor = {
-          settings: {
-            decimal: 6,
-            from: 'gram',
-            to: 'kyatThar',
-            format: {
-              includeUnit: true,
-              localize: false,
-              locale: 'en-US',
-            },
-          },
-          data: { ...massData },
-          updateSettings(newSettings) {
-            this.settings = { ...this.settings, ...newSettings };
-            return this;
-          },
-          updateValues(newData) {
-            this.data = { ...this.data, ...newData };
-            return this;
-          },
-          metric2Burmese(value) {
-            const result = formatNumber(value / this.data[this.settings.to], this.settings.decimal);
-            return {
-              value: result,
-              originalValue: value,
-              fromUnit: this.settings.from,
-              toUnit: this.settings.to,
-              formatted: `${result} ${this.settings.to}`,
-            };
-          },
-          burmese2Metric(value) {
-            const result = formatNumber(
-              value * this.data[this.settings.from],
-              this.settings.decimal
-            );
-            return {
-              value: result,
-              originalValue: value,
-              fromUnit: this.settings.from,
-              toUnit: this.settings.to,
-              formatted: `${result} ${this.settings.to}`,
-            };
-          },
-        };
-
-        const lengthConvertor = {
-          settings: {
-            decimal: 6,
-            from: 'meter',
-            to: 'taung',
-            format: {
-              includeUnit: true,
-              localize: false,
-              locale: 'en-US',
-            },
-          },
-          data: { ...lengthData },
-          updateSettings(newSettings) {
-            this.settings = { ...this.settings, ...newSettings };
-            return this;
-          },
-          updateValues(newData) {
-            this.data = { ...this.data, ...newData };
-            return this;
-          },
-          metric2Burmese(value) {
-            const result = formatNumber(value / this.data[this.settings.to], this.settings.decimal);
-            return {
-              value: result,
-              originalValue: value,
-              fromUnit: this.settings.from,
-              toUnit: this.settings.to,
-              formatted: `${result} ${this.settings.to}`,
-            };
-          },
-          burmese2Metric(value) {
-            const result = formatNumber(
-              value * this.data[this.settings.from],
-              this.settings.decimal
-            );
-            return {
-              value: result,
-              originalValue: value,
-              fromUnit: this.settings.from,
-              toUnit: this.settings.to,
-              formatted: `${result} ${this.settings.to}`,
-            };
-          },
-        };
-
-        const volumeConvertor = {
-          settings: {
-            decimal: 6,
-            from: 'liter',
-            to: 'pyi',
-            format: {
-              includeUnit: true,
-              localize: false,
-              locale: 'en-US',
-            },
-          },
-          data: { ...volumeData },
-          updateSettings(newSettings) {
-            this.settings = { ...this.settings, ...newSettings };
-            return this;
-          },
-          updateValues(newData) {
-            this.data = { ...this.data, ...newData };
-            return this;
-          },
-          metric2Burmese(value) {
-            const result = formatNumber(value / this.data[this.settings.to], this.settings.decimal);
-            return {
-              value: result,
-              originalValue: value,
-              fromUnit: this.settings.from,
-              toUnit: this.settings.to,
-              formatted: `${result} ${this.settings.to}`,
-            };
-          },
-          burmese2Metric(value) {
-            const result = formatNumber(
-              value * this.data[this.settings.from],
-              this.settings.decimal
-            );
-            return {
-              value: result,
-              originalValue: value,
-              fromUnit: this.settings.from,
-              toUnit: this.settings.to,
-              formatted: `${result} ${this.settings.to}`,
-            };
-          },
-        };
-
-        const moneyConvertor = {
-          settings: {
-            decimal: 2,
-            format: {
-              localize: true,
-              locale: 'my-MM',
-            },
-          },
-          updateSettings(newSettings) {
-            this.settings = { ...this.settings, ...newSettings };
-            return this;
-          },
-          kyatPya2Decimal(kyat, pya = 0) {
-            const decimal = formatNumber(kyat + pya / 100, this.settings.decimal);
-            return {
-              value: decimal,
-              originalValue: kyat + pya / 100,
-              fromUnit: 'kyat_pya',
-              toUnit: 'kyat',
-              formatted: this.formatDecimalAsKyatPya(decimal),
-            };
-          },
-          formatDecimalAsKyatPya(decimal) {
-            if (this.settings.format.localize) {
-              return new Intl.NumberFormat(this.settings.format.locale, {
-                style: 'currency',
-                currency: 'MMK',
-                currencyDisplay: 'symbol',
-              }).format(decimal);
-            }
-
-            const kyat = Math.floor(decimal);
-            const pya = Math.round((decimal - kyat) * 100);
-
-            if (pya === 0) {
-              return `${kyat} Ks`;
-            }
-
-            return `${kyat} Ks ${pya} pya`;
-          },
-        };
-
-        return {
-          massConvertor,
-          lengthConvertor,
-          volumeConvertor,
-          moneyConvertor,
-        };
+    // For demo purposes, we'll use a placeholder that simulates the package behavior
+    const simulatePackage = () => {
+      const formatNumber = (value, decimals = 6) => {
+        return Number(value.toFixed(decimals));
       };
 
-      // Initialize the simulated package
-      const { massConvertor, lengthConvertor, volumeConvertor, moneyConvertor } = simulatePackage();
-
-      // Add error display elements to all converters
-      document.querySelectorAll('.converter').forEach((converter) => {
-        if (!converter.querySelector('.error')) {
-          const errorDiv = document.createElement('div');
-          errorDiv.className = 'error';
-          errorDiv.style.color = 'red';
-          errorDiv.style.marginTop = '10px';
-          converter.appendChild(errorDiv);
-        }
-      });
-
-      // Helper function to safely perform conversion
-      const safeConvert = (converter, value, from, to, resultElement, errorElement, isMetric) => {
-        try {
-          // Clear previous errors
-          errorElement.textContent = '';
-
-          // Check if the unit exists in the data
-          if (from !== 'gram' && from !== 'meter' && from !== 'liter' && !converter.data[from]) {
-            throw new Error(`Unknown unit: ${from}`);
-          }
-
-          if (to !== 'gram' && to !== 'meter' && to !== 'liter' && !converter.data[to]) {
-            throw new Error(`Unknown unit: ${to}`);
-          }
-
-          // Update settings first
-          converter.updateSettings({
-            decimal: 2,
-            from: from,
-            to: to,
-          });
-
-          // Then perform conversion
-          const result = isMetric
-            ? converter.metric2Burmese(value)
-            : converter.burmese2Metric(value);
-
-          if (isNaN(result.value)) {
-            throw new Error('Conversion resulted in an invalid number. Check your units.');
-          }
-
-          resultElement.textContent = `${value} ${from} = ${result.value} ${to}`;
-        } catch (error) {
-          errorElement.textContent = `Error: ${error.message}`;
-          resultElement.textContent = 'Conversion failed';
-        }
+      // Simulated conversion data
+      const massData = {
+        kyatThar: 16.3293,
+        paeThar: 1.02058,
+        ywayGyi: 0.272155,
       };
 
-      // Set up event listeners
-      document.getElementById('mass-convert').addEventListener('click', () => {
-        const value = parseFloat(document.getElementById('mass-value').value);
-        const from = document.getElementById('mass-from').value;
-        const to = document.getElementById('mass-to').value;
-        const resultElement = document.getElementById('mass-result');
-        const errorElement =
-          document.querySelector('#mass-convert').parentNode.querySelector('.error') ||
-          document.createElement('div');
+      const lengthData = {
+        taung: 0.4572,
+        lan: 1.8288,
+      };
 
-        if (isNaN(value)) {
-          errorElement.textContent = 'Please enter a valid number';
-          resultElement.textContent = '';
-          return;
-        }
+      const volumeData = {
+        pyi: 2.55718,
+        tin: 40.9148,
+      };
 
-        safeConvert(massConvertor, value, from, to, resultElement, errorElement, from === 'gram');
-      });
+      // Simulated converters with the new global settings approach
+      const massConvertor = {
+        settings: {
+          decimal: 6,
+          from: 'gram',
+          to: 'kyatThar',
+          format: {
+            includeUnit: true,
+            localize: false,
+            locale: 'en-US',
+          },
+        },
+        data: { ...massData },
+        updateSettings(newSettings) {
+          this.settings = { ...this.settings, ...newSettings };
+          return this;
+        },
+        updateValues(newData) {
+          this.data = { ...this.data, ...newData };
+          return this;
+        },
+        metric2Burmese(value) {
+          const result = formatNumber(value / this.data[this.settings.to], this.settings.decimal);
+          return {
+            value: result,
+            originalValue: value,
+            fromUnit: this.settings.from,
+            toUnit: this.settings.to,
+            formatted: `${result} ${this.settings.to}`,
+          };
+        },
+        burmese2Metric(value) {
+          const result = formatNumber(
+            value * this.data[this.settings.from],
+            this.settings.decimal
+          );
+          return {
+            value: result,
+            originalValue: value,
+            fromUnit: this.settings.from,
+            toUnit: this.settings.to,
+            formatted: `${result} ${this.settings.to}`,
+          };
+        },
+      };
 
-      document.getElementById('length-convert').addEventListener('click', () => {
-        const value = parseFloat(document.getElementById('length-value').value);
-        const from = document.getElementById('length-from').value;
-        const to = document.getElementById('length-to').value;
-        const resultElement = document.getElementById('length-result');
-        const errorElement =
-          document.getElementById('length-error') ||
-          document.querySelector('#length-convert').parentNode.querySelector('.error') ||
-          document.createElement('div');
+      const lengthConvertor = {
+        settings: {
+          decimal: 6,
+          from: 'meter',
+          to: 'taung',
+          format: {
+            includeUnit: true,
+            localize: false,
+            locale: 'en-US',
+          },
+        },
+        data: { ...lengthData },
+        updateSettings(newSettings) {
+          this.settings = { ...this.settings, ...newSettings };
+          return this;
+        },
+        updateValues(newData) {
+          this.data = { ...this.data, ...newData };
+          return this;
+        },
+        metric2Burmese(value) {
+          const result = formatNumber(value / this.data[this.settings.to], this.settings.decimal);
+          return {
+            value: result,
+            originalValue: value,
+            fromUnit: this.settings.from,
+            toUnit: this.settings.to,
+            formatted: `${result} ${this.settings.to}`,
+          };
+        },
+        burmese2Metric(value) {
+          const result = formatNumber(
+            value * this.data[this.settings.from],
+            this.settings.decimal
+          );
+          return {
+            value: result,
+            originalValue: value,
+            fromUnit: this.settings.from,
+            toUnit: this.settings.to,
+            formatted: `${result} ${this.settings.to}`,
+          };
+        },
+      };
 
-        if (isNaN(value)) {
-          errorElement.textContent = 'Please enter a valid number';
-          resultElement.textContent = '';
-          return;
-        }
+      const volumeConvertor = {
+        settings: {
+          decimal: 6,
+          from: 'liter',
+          to: 'pyi',
+          format: {
+            includeUnit: true,
+            localize: false,
+            locale: 'en-US',
+          },
+        },
+        data: { ...volumeData },
+        updateSettings(newSettings) {
+          this.settings = { ...this.settings, ...newSettings };
+          return this;
+        },
+        updateValues(newData) {
+          this.data = { ...this.data, ...newData };
+          return this;
+        },
+        metric2Burmese(value) {
+          const result = formatNumber(value / this.data[this.settings.to], this.settings.decimal);
+          return {
+            value: result,
+            originalValue: value,
+            fromUnit: this.settings.from,
+            toUnit: this.settings.to,
+            formatted: `${result} ${this.settings.to}`,
+          };
+        },
+        burmese2Metric(value) {
+          const result = formatNumber(
+            value * this.data[this.settings.from],
+            this.settings.decimal
+          );
+          return {
+            value: result,
+            originalValue: value,
+            fromUnit: this.settings.from,
+            toUnit: this.settings.to,
+            formatted: `${result} ${this.settings.to}`,
+          };
+        },
+      };
 
-        safeConvert(
-          lengthConvertor,
-          value,
-          from,
-          to,
-          resultElement,
-          errorElement,
-          from === 'meter'
-        );
-      });
-
-      document.getElementById('volume-convert').addEventListener('click', () => {
-        const value = parseFloat(document.getElementById('volume-value').value);
-        const from = document.getElementById('volume-from').value;
-        const to = document.getElementById('volume-to').value;
-        const resultElement = document.getElementById('volume-result');
-        const errorElement =
-          document.querySelector('#volume-convert').parentNode.querySelector('.error') ||
-          document.createElement('div');
-
-        if (isNaN(value)) {
-          errorElement.textContent = 'Please enter a valid number';
-          resultElement.textContent = '';
-          return;
-        }
-
-        safeConvert(
-          volumeConvertor,
-          value,
-          from,
-          to,
-          resultElement,
-          errorElement,
-          from === 'liter'
-        );
-      });
-
-      document.getElementById('money-convert').addEventListener('click', () => {
-        const kyat = parseInt(document.getElementById('money-kyat').value);
-        const pya = parseInt(document.getElementById('money-pya').value);
-        const locale = document.getElementById('money-locale').value;
-        const resultElement = document.getElementById('money-result');
-        const errorElement =
-          document.querySelector('#money-convert').parentNode.querySelector('.error') ||
-          document.createElement('div');
-
-        if (isNaN(kyat) || isNaN(pya)) {
-          errorElement.textContent = 'Please enter valid numbers';
-          resultElement.textContent = '';
-          return;
-        }
-
-        try {
-          // Clear previous errors
-          errorElement.textContent = '';
-
-          // Validate inputs
-          if (kyat < 0 || pya < 0 || pya > 99) {
-            throw new Error('Kyat must be positive and pya must be between 0-99');
+      const moneyConvertor = {
+        settings: {
+          decimal: 2,
+          format: {
+            localize: true,
+            locale: 'my-MM',
+          },
+        },
+        updateSettings(newSettings) {
+          this.settings = { ...this.settings, ...newSettings };
+          return this;
+        },
+        kyatPya2Decimal(kyat, pya = 0) {
+          const decimal = formatNumber(kyat + pya / 100, this.settings.decimal);
+          return {
+            value: decimal,
+            originalValue: kyat + pya / 100,
+            fromUnit: 'kyat_pya',
+            toUnit: 'kyat',
+            formatted: this.formatDecimalAsKyatPya(decimal),
+          };
+        },
+        formatDecimalAsKyatPya(decimal) {
+          if (this.settings.format.localize) {
+            return new Intl.NumberFormat(this.settings.format.locale, {
+              style: 'currency',
+              currency: 'MMK',
+              currencyDisplay: 'symbol',
+            }).format(decimal);
           }
 
-          // Update settings first
-          moneyConvertor.updateSettings({
-            format: {
-              localize: true,
-              locale: locale,
-            },
-          });
+          const kyat = Math.floor(decimal);
+          const pya = Math.round((decimal - kyat) * 100);
 
-          // Then perform conversion
-          const result = moneyConvertor.kyatPya2Decimal(kyat, pya);
-
-          if (!result.formatted) {
-            throw new Error('Formatting failed. Check your locale settings.');
+          if (pya === 0) {
+            return `${kyat} Ks`;
           }
 
-          resultElement.textContent = result.formatted;
-        } catch (error) {
-          errorElement.textContent = `Error: ${error.message}`;
-          resultElement.textContent = 'Formatting failed';
+          return `${kyat} Ks ${pya} pya`;
+        },
+      };
+
+      return {
+        massConvertor,
+        lengthConvertor,
+        volumeConvertor,
+        moneyConvertor,
+      };
+    };
+
+    // Initialize the simulated package
+    const { massConvertor, lengthConvertor, volumeConvertor, moneyConvertor } = simulatePackage();
+
+    // Helper function to safely perform conversion
+    const safeConvert = (converter, value, from, to, resultElement, errorElement, isMetric) => {
+      try {
+        // Clear previous errors
+        errorElement.textContent = '';
+
+        // Check if the unit exists in the data
+        if (from !== 'gram' && from !== 'meter' && from !== 'liter' && !converter.data[from]) {
+          throw new Error(`Unknown unit: ${from}`);
         }
-      });
-    </script>
-  </body>
+
+        if (to !== 'gram' && to !== 'meter' && to !== 'liter' && !converter.data[to]) {
+          throw new Error(`Unknown unit: ${to}`);
+        }
+
+        // Update settings first
+        converter.updateSettings({
+          decimal: 2,
+          from: from,
+          to: to,
+        });
+
+        // Then perform conversion
+        const result = isMetric
+          ? converter.metric2Burmese(value)
+          : converter.burmese2Metric(value);
+
+        if (isNaN(result.value)) {
+          throw new Error('Conversion resulted in an invalid number. Check your units.');
+        }
+
+        resultElement.textContent = `${value} ${from} = ${result.value} ${to}`;
+      } catch (error) {
+        errorElement.textContent = `Error: ${error.message}`;
+        resultElement.textContent = 'Conversion failed';
+      }
+    };
+
+    // Set up event listeners
+    document.getElementById('mass-convert').addEventListener('click', () => {
+      const value = parseFloat(document.getElementById('mass-value').value);
+      const from = document.getElementById('mass-from').value;
+      const to = document.getElementById('mass-to').value;
+      const resultElement = document.getElementById('mass-result');
+      const errorElement = document.getElementById('mass-error');
+
+      if (isNaN(value)) {
+        errorElement.textContent = 'Please enter a valid number';
+        resultElement.textContent = '';
+        return;
+      }
+
+      safeConvert(massConvertor, value, from, to, resultElement, errorElement, from === 'gram');
+    });
+
+    document.getElementById('length-convert').addEventListener('click', () => {
+      const value = parseFloat(document.getElementById('length-value').value);
+      const from = document.getElementById('length-from').value;
+      const to = document.getElementById('length-to').value;
+      const resultElement = document.getElementById('length-result');
+      const errorElement = document.getElementById('length-error');
+
+      if (isNaN(value)) {
+        errorElement.textContent = 'Please enter a valid number';
+        resultElement.textContent = '';
+        return;
+      }
+
+      safeConvert(
+        lengthConvertor,
+        value,
+        from,
+        to,
+        resultElement,
+        errorElement,
+        from === 'meter'
+      );
+    });
+
+    document.getElementById('volume-convert').addEventListener('click', () => {
+      const value = parseFloat(document.getElementById('volume-value').value);
+      const from = document.getElementById('volume-from').value;
+      const to = document.getElementById('volume-to').value;
+      const resultElement = document.getElementById('volume-result');
+      const errorElement = document.getElementById('volume-error');
+
+      if (isNaN(value)) {
+        errorElement.textContent = 'Please enter a valid number';
+        resultElement.textContent = '';
+        return;
+      }
+
+      safeConvert(
+        volumeConvertor,
+        value,
+        from,
+        to,
+        resultElement,
+        errorElement,
+        from === 'liter'
+      );
+    });
+
+    document.getElementById('money-convert').addEventListener('click', () => {
+      const kyat = parseInt(document.getElementById('money-kyat').value);
+      const pya = parseInt(document.getElementById('money-pya').value);
+      const locale = document.getElementById('money-locale').value;
+      const resultElement = document.getElementById('money-result');
+      const errorElement = document.getElementById('money-error');
+
+      if (isNaN(kyat) || isNaN(pya)) {
+        errorElement.textContent = 'Please enter valid numbers';
+        resultElement.textContent = '';
+        return;
+      }
+
+      try {
+        // Clear previous errors
+        errorElement.textContent = '';
+
+        // Validate inputs
+        if (kyat < 0 || pya < 0 || pya > 99) {
+          throw new Error('Kyat must be positive and pya must be between 0-99');
+        }
+
+        // Update settings first
+        moneyConvertor.updateSettings({
+          format: {
+            localize: true,
+            locale: locale,
+          },
+        });
+
+        // Then perform conversion
+        const result = moneyConvertor.kyatPya2Decimal(kyat, pya);
+
+        if (!result.formatted) {
+          throw new Error('Formatting failed. Check your locale settings.');
+        }
+
+        resultElement.textContent = result.formatted;
+      } catch (error) {
+        errorElement.textContent = `Error: ${error.message}`;
+        resultElement.textContent = 'Formatting failed';
+      }
+    });
+  </script>
+</body>
+
 </html>

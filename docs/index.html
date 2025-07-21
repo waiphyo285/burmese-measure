@@ -1,85 +1,390 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Documentation for the Burmese Measure library - a comprehensive conversion package for Burmese measurement units and the metric system"
-    />
-    <title>Burmese Measure - Documentation</title>
-    <link rel="stylesheet" href="css/styles.css" />
-  </head>
-  <body>
-    <header class="header">
-      <a href="index.html" class="header-logo">Burmese Measure</a>
-      <nav class="header-nav">
-        <a href="index.html" class="active">Documentation</a>
-        <a href="demo.html">Demo</a>
-        <a href="https://github.com/waiphyo285/burmese-measure" target="_blank">GitHub</a>
-      </nav>
-    </header>
 
-    <button class="menu-toggle">Documentation Menu</button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Documentation for the Burmese Measure library - a comprehensive conversion package for Burmese measurement units and the metric system" />
+  <title>Burmese Measure - Documentation</title>
+  <!-- Google Fonts - Quicksand -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+  <!-- Fira Code for code blocks -->
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Bootstrap 5.3.2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <!-- Custom styles -->
+  <style>
+    :root {
+      --primary-color: #4caf50;
+      --primary-dark: #3d8b40;
+      --primary-light: #a5d6a7;
+      --primary-bg: #f1f8e9;
+      --code-bg: #f5f7fa;
+      --dark-text: #2d3436;
+      --light-text: #636e72;
+    }
 
-    <div class="container">
-      <div class="sidebar">
-        <h3>Contents</h3>
-        <ul>
-          <li><a href="#introduction">Introduction</a></li>
-          <li><a href="#installation">Installation</a></li>
-          <li><a href="#quick-start">Quick Start</a></li>
-          <li>
-            <div class="menu-item has-submenu">API Reference</div>
-            <ul class="submenu">
-              <li><a href="#mass-converter">Mass Converter</a></li>
-              <li><a href="#length-converter">Length Converter</a></li>
-              <li><a href="#volume-converter">Volume Converter</a></li>
-              <li><a href="#money-converter">Money Converter</a></li>
-            </ul>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      color: var(--dark-text);
+      line-height: 1.7;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    .navbar-brand {
+      font-weight: 600;
+    }
+
+    .navbar {
+      backdrop-filter: blur(10px);
+      background-color: rgba(255, 255, 255, 0.9) !important;
+    }
+
+    .card {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      border: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    pre {
+      background-color: var(--code-bg);
+      border-left: 4px solid var(--primary-color);
+      border-radius: 8px;
+      padding: 1rem;
+    }
+
+    pre code {
+      padding: 0;
+      background-color: transparent;
+      font-family: 'Fira Code', 'Courier New', monospace;
+    }
+
+    code:not(pre code) {
+      color: var(--primary-dark);
+      background-color: rgba(76, 175, 80, 0.1);
+      padding: 0.2rem 0.4rem;
+      border-radius: 4px;
+      font-family: 'Fira Code', 'Courier New', monospace;
+    }
+
+    .btn-success {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+      border-radius: 8px;
+      font-weight: 500;
+      padding: 0.5rem 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-success:hover {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar-nav .nav-link {
+      padding: 0.75rem 0;
+      color: var(--dark-text);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar-nav .nav-link:hover {
+      background-color: var(--primary-bg);
+      color: var(--primary-dark);
+      padding-left: 0.5rem;
+    }
+
+    .sidebar-nav .nav-link.active {
+      color: var(--primary-dark);
+      font-weight: 600;
+      background-color: var(--primary-bg);
+    }
+
+    .accordion-button:not(.collapsed) {
+      background-color: var(--primary-bg);
+      color: var(--primary-dark);
+      box-shadow: none;
+      font-weight: 600;
+    }
+
+    .accordion-button:focus {
+      box-shadow: none;
+      border-color: var(--primary-light);
+    }
+
+    .table {
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .table-success {
+      background-color: var(--primary-bg) !important;
+    }
+
+    .alert {
+      border-radius: 8px;
+    }
+
+    .list-group-item {
+      border-radius: 6px !important;
+      margin-bottom: 2px;
+    }
+
+    .list-group-item-action:hover {
+      background-color: var(--primary-bg);
+    }
+
+    footer {
+      background-color: #f8f9fa;
+    }
+
+    /* Modern scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #c1c1c1;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a8a8a8;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Bootstrap Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold text-success" href="index.html">Burmese Measure</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link active" href="index.html">Documentation</a>
           </li>
-          <li>
-            <div class="menu-item has-submenu">Advanced Usage</div>
-            <ul class="submenu">
-              <li><a href="#global-settings">Global Settings</a></li>
-              <li><a href="#updating-data">Updating Data</a></li>
-              <li><a href="#batch-conversion">Batch Conversion</a></li>
-            </ul>
+          <li class="nav-item">
+            <a class="nav-link" href="demo.html">Demo</a>
           </li>
-          <li><a href="#cli">Command Line Interface</a></li>
-          <li>
-            <div class="menu-item has-submenu">Burmese Units</div>
-            <ul class="submenu">
-              <li><a href="#burmese-units">Overview</a></li>
-              <li><a href="#mass-units">Mass Units</a></li>
-              <li><a href="#length-units">Length Units</a></li>
-              <li><a href="#volume-units">Volume Units</a></li>
-              <li><a href="#money-units">Money Units</a></li>
-            </ul>
+          <li class="nav-item">
+            <a class="nav-link" href="https://github.com/waiphyo285/burmese-measure" target="_blank">GitHub</a>
           </li>
         </ul>
-        <a href="demo.html" class="demo-link">Try the Demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid py-5 mt-5">
+    <div class="row g-4">
+      <!-- Sidebar -->
+      <div class="col-lg-3 col-md-4 d-none d-md-block">
+        <div class="position-sticky" style="top: 90px;">
+          <div class="card shadow-sm">
+            <div class="card-header bg-light">
+              <h5 class="mb-0">Contents</h5>
+            </div>
+            <div class="card-body p-0">
+              <nav class="sidebar-nav">
+                <div class="list-group list-group-flush">
+                  <a href="#introduction" class="list-group-item list-group-item-action border-0 py-2">Introduction</a>
+                  <a href="#installation" class="list-group-item list-group-item-action border-0 py-2">Installation</a>
+                  <a href="#quick-start" class="list-group-item list-group-item-action border-0 py-2">Quick Start</a>
+
+                  <!-- API Reference Accordion -->
+                  <div class="accordion accordion-flush" id="apiAccordion">
+                    <div class="accordion-item border-0">
+                      <h6 class="accordion-header">
+                        <button class="accordion-button collapsed py-2 px-3 bg-transparent" type="button"
+                          data-bs-toggle="collapse" data-bs-target="#apiCollapse">
+                          API Reference
+                        </button>
+                      </h6>
+                      <div id="apiCollapse" class="accordion-collapse collapse" data-bs-parent="#apiAccordion">
+                        <div class="accordion-body p-0">
+                          <div class="list-group list-group-flush">
+                            <a href="#mass-converter"
+                              class="list-group-item list-group-item-action border-0 py-2 ps-4">Mass
+                              Converter</a>
+                            <a href="#length-converter"
+                              class="list-group-item list-group-item-action border-0 py-2 ps-4">Length
+                              Converter</a>
+                            <a href="#volume-converter"
+                              class="list-group-item list-group-item-action border-0 py-2 ps-4">Volume
+                              Converter</a>
+                            <a href="#money-converter"
+                              class="list-group-item list-group-item-action border-0 py-2 ps-4">Money
+                              Converter</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Advanced Usage Accordion -->
+                  <div class="accordion accordion-flush" id="advancedAccordion">
+                    <div class="accordion-item border-0">
+                      <h6 class="accordion-header">
+                        <button class="accordion-button collapsed py-2 px-3 bg-transparent" type="button"
+                          data-bs-toggle="collapse" data-bs-target="#advancedCollapse">
+                          Advanced Usage
+                        </button>
+                      </h6>
+                      <div id="advancedCollapse" class="accordion-collapse collapse"
+                        data-bs-parent="#advancedAccordion">
+                        <div class="accordion-body p-0">
+                          <div class="list-group list-group-flush">
+                            <a href="#global-settings"
+                              class="list-group-item list-group-item-action border-0 py-2 ps-4">Global
+                              Settings</a>
+                            <a href="#updating-data"
+                              class="list-group-item list-group-item-action border-0 py-2 ps-4">Updating
+                              Data</a>
+                            <a href="#batch-conversion"
+                              class="list-group-item list-group-item-action border-0 py-2 ps-4">Batch
+                              Conversion</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <a href="#cli" class="list-group-item list-group-item-action border-0 py-2">Command Line</a>
+
+                  <!-- Burmese Units Accordion -->
+                  <div class="accordion accordion-flush" id="unitsAccordion">
+                    <div class="accordion-item border-0">
+                      <h6 class="accordion-header">
+                        <button class="accordion-button collapsed py-2 px-3 bg-transparent" type="button"
+                          data-bs-toggle="collapse" data-bs-target="#unitsCollapse">
+                          Burmese Units
+                        </button>
+                      </h6>
+                      <div id="unitsCollapse" class="accordion-collapse collapse" data-bs-parent="#unitsAccordion">
+                        <div class="accordion-body p-0">
+                          <div class="list-group list-group-flush">
+                            <a href="#burmese-units"
+                              class="list-group-item list-group-item-action border-0 py-2 ps-4">Overview</a>
+                            <a href="#mass-units" class="list-group-item list-group-item-action border-0 py-2 ps-4">Mass
+                              Units</a>
+                            <a href="#length-units"
+                              class="list-group-item list-group-item-action border-0 py-2 ps-4">Length
+                              Units</a>
+                            <a href="#volume-units"
+                              class="list-group-item list-group-item-action border-0 py-2 ps-4">Volume
+                              Units</a>
+                            <a href="#money-units"
+                              class="list-group-item list-group-item-action border-0 py-2 ps-4">Money
+                              Units</a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </nav>
+            </div>
+            <div class="card-footer bg-light">
+              <a href="demo.html" class="btn btn-success w-100">Try the Demo</a>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="content">
-        <section id="introduction">
-          <h2>Introduction</h2>
-          <p>
+      <!-- Mobile Menu Button -->
+      <div class="d-md-none mb-3">
+        <button class="btn btn-success w-100" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+          <i class="bi bi-list me-2"></i> Documentation Menu
+        </button>
+      </div>
+
+      <!-- Mobile Offcanvas Menu -->
+      <div class="offcanvas offcanvas-start d-md-none" tabindex="-1" id="mobileMenu">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title">Contents</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-0">
+          <div class="list-group list-group-flush">
+            <a href="#introduction" class="list-group-item list-group-item-action py-2"
+              data-bs-dismiss="offcanvas">Introduction</a>
+            <a href="#installation" class="list-group-item list-group-item-action py-2"
+              data-bs-dismiss="offcanvas">Installation</a>
+            <a href="#quick-start" class="list-group-item list-group-item-action py-2" data-bs-dismiss="offcanvas">Quick
+              Start</a>
+            <a href="#mass-converter" class="list-group-item list-group-item-action py-2"
+              data-bs-dismiss="offcanvas">Mass Converter</a>
+            <a href="#length-converter" class="list-group-item list-group-item-action py-2"
+              data-bs-dismiss="offcanvas">Length Converter</a>
+            <a href="#volume-converter" class="list-group-item list-group-item-action py-2"
+              data-bs-dismiss="offcanvas">Volume Converter</a>
+            <a href="#money-converter" class="list-group-item list-group-item-action py-2"
+              data-bs-dismiss="offcanvas">Money Converter</a>
+            <a href="#global-settings" class="list-group-item list-group-item-action py-2"
+              data-bs-dismiss="offcanvas">Global Settings</a>
+            <a href="#updating-data" class="list-group-item list-group-item-action py-2"
+              data-bs-dismiss="offcanvas">Updating Data</a>
+            <a href="#batch-conversion" class="list-group-item list-group-item-action py-2"
+              data-bs-dismiss="offcanvas">Batch Conversion</a>
+            <a href="#cli" class="list-group-item list-group-item-action py-2" data-bs-dismiss="offcanvas">CLI</a>
+            <a href="#burmese-units" class="list-group-item list-group-item-action py-2"
+              data-bs-dismiss="offcanvas">Burmese Units</a>
+          </div>
+          <div class="p-3">
+            <a href="demo.html" class="btn btn-success w-100">Try the Demo</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="col-lg-9 col-md-8">
+        <section id="introduction" class="mb-5">
+          <h2 class="border-bottom pb-2 mb-4">Introduction</h2>
+          <p class="lead">
             Burmese Measure is a comprehensive conversion package for Burmese measurement units and
             the metric system. This package provides easy-to-use converters for mass, length,
-            volume, and money units with both programmatic and command-line interfaces.
-          </p>
-          <p>
-            The library is designed to be simple to use while providing powerful features for
+            volume, and money units with both programmatic and command-line interfaces. The library is designed to be
+            simple to use while providing powerful features for
             developers who need to work with traditional Burmese units of measurement.
           </p>
+
         </section>
 
-        <section id="installation">
-          <h2>Installation</h2>
+        <section id="installation" class="mb-5">
+          <h2 class="border-bottom pb-2 mb-4">Installation</h2>
           <p>You can install the package using npm, yarn, or pnpm:</p>
 
-          <pre><code># Using npm
+          <div class="bg-light">
+            <pre class="mb-0 p-3"><code># Using npm
 npm install burmese-measure
 
 # Using yarn
@@ -87,13 +392,15 @@ yarn add burmese-measure
 
 # Using pnpm
 pnpm add burmese-measure</code></pre>
+          </div>
         </section>
 
-        <section id="quick-start">
-          <h2>Quick Start</h2>
+        <section id="quick-start" class="mb-5">
+          <h2 class="border-bottom pb-2 mb-4">Quick Start</h2>
 
-          <h3>CommonJS</h3>
-          <pre><code>const {
+          <div class="mb-4">
+            <h3>CommonJS</h3>
+            <pre class="p-3"><code>const {
   massConvertor,
   lengthConvertor,
   volumeConvertor,
@@ -102,30 +409,33 @@ pnpm add burmese-measure</code></pre>
 
 // Convert 100 grams to kyatThar
 const result = massConvertor.metric2Burmese(100);
-console.log(`100 grams = ${result.value} kyatThar`);
 
 // Convert 5 kyat 3 pae to grams
 const gramResult = massConvertor.kyatPae2Gram(5, 3);
-console.log(`5 kyat 3 pae = ${gramResult.value} grams`);</code></pre>
+</code></pre>
+          </div>
 
-          <h3>ES Modules</h3>
-          <pre><code>import { massConvertor, lengthConvertor, volumeConvertor, moneyConvertor } from 'burmese-measure';
+          <div>
+            <h3>ES Modules</h3>
+            <pre class="p-3"><code>import { massConvertor, lengthConvertor, volumeConvertor, moneyConvertor } from 'burmese-measure';
 
 // Convert 2 meters to lan
 const result = lengthConvertor.metric2Burmese(2);
-console.log(`2 meters = ${result.value} lan`);
 
 // Format 2.5 meters as taung and let-thit
 const formatted = lengthConvertor.formatMeterAsTaungLetThit(2.5);
-console.log(`2.5 meters = ${formatted}`);</code></pre>
+</code></pre>
+          </div>
         </section>
 
-        <section id="api-reference">
-          <h2>API Reference</h2>
+        <section id="api-reference" class="mb-5">
+          <h2 class="border-bottom pb-2 mb-4">API Reference</h2>
 
-          <section id="mass-converter">
-            <h3>Mass Converter</h3>
-            <pre><code>// Basic conversions
+          <section id="mass-converter" class="mb-4">
+            <h3 class="mb-3">Mass Converter</h3>
+            <div class="card">
+              <div class="card-body p-0">
+                <pre class="p-3 mb-0"><code>// Basic conversions
 massConvertor.metric2Burmese(value: number): ConversionResult;
 massConvertor.burmese2Metric(value: number): ConversionResult;
 
@@ -143,11 +453,15 @@ massConvertor.batchBurmese2Metric(values: number[]): BatchConversionResult;
 // Configuration
 massConvertor.updateSettings({ decimal: 2, from: 'gram', to: 'kyatThar' });
 massConvertor.updateValues({ kyatThar: 16.5 });</code></pre>
+              </div>
+            </div>
           </section>
 
-          <section id="length-converter">
-            <h3>Length Converter</h3>
-            <pre><code>// Basic conversions
+          <section id="length-converter" class="mb-4">
+            <h3 class="mb-3">Length Converter</h3>
+            <div class="card">
+              <div class="card-body p-0">
+                <pre class="p-3 mb-0"><code>// Basic conversions
 lengthConvertor.metric2Burmese(value: number): ConversionResult;
 lengthConvertor.burmese2Metric(value: number): ConversionResult;
 
@@ -163,11 +477,15 @@ lengthConvertor.batchBurmese2Metric(values: number[]): BatchConversionResult;
 // Configuration
 lengthConvertor.updateSettings({ decimal: 2, from: 'meter', to: 'taung' });
 lengthConvertor.updateValues({ taung: 0.46 });</code></pre>
+              </div>
+            </div>
           </section>
 
-          <section id="volume-converter">
-            <h3>Volume Converter</h3>
-            <pre><code>// Basic conversions
+          <section id="volume-converter" class="mb-4">
+            <h3 class="mb-3">Volume Converter</h3>
+            <div class="card">
+              <div class="card-body p-0">
+                <pre class="p-3 mb-0"><code>// Basic conversions
 volumeConvertor.metric2Burmese(value: number): ConversionResult;
 volumeConvertor.burmese2Metric(value: number): ConversionResult;
 
@@ -183,11 +501,15 @@ volumeConvertor.batchBurmese2Metric(values: number[]): BatchConversionResult;
 // Configuration
 volumeConvertor.updateSettings({ decimal: 2, from: 'liter', to: 'pyi' });
 volumeConvertor.updateValues({ pyi: 2.6 });</code></pre>
+              </div>
+            </div>
           </section>
 
-          <section id="money-converter">
-            <h3>Money Converter</h3>
-            <pre><code>// Specialized conversions
+          <section id="money-converter" class="mb-4">
+            <h3 class="mb-3">Money Converter</h3>
+            <div class="card">
+              <div class="card-body p-0">
+                <pre class="p-3 mb-0"><code>// Specialized conversions
 moneyConvertor.kyatPya2Decimal(kyat: number, pya?: number): ConversionResult;
 moneyConvertor.decimal2KyatPya(decimal: number): [kyat: number, pya: number];
 moneyConvertor.formatDecimalAsKyatPya(decimal: number): string;
@@ -200,85 +522,100 @@ moneyConvertor.updateSettings({
     locale: 'my-MM'
   }
 });</code></pre>
+              </div>
+            </div>
           </section>
         </section>
 
-        <section id="advanced-usage">
-          <h2>Advanced Usage</h2>
+        <section id="advanced-usage" class="mb-5">
+          <h2 class="border-bottom pb-2 mb-4">Advanced Usage</h2>
 
-          <section id="global-settings">
-            <h3>Global Settings and Data</h3>
+          <section id="global-settings" class="mb-4">
+            <h3 class="mb-3">Global Settings</h3>
             <p>
               The library uses a global approach for both settings and conversion data. Instead of
               passing settings or custom data to each conversion method, you should update the
               global settings and data first and then perform conversions:
             </p>
 
-            <pre><code>// Update global settings for the converter
+            <div class="card mb-3">
+              <div class="card-body p-0">
+                <pre class="p-3 mb-0"><code>// Update global settings for the converter
 massConvertor.updateSettings({
-  decimal: 2, // Number of decimal places in results
-  from: 'gram', // Source unit
-  to: 'paeThar', // Target unit
+  decimal: 2,
+  from: 'gram',
+  to: 'paeThar',
   format: {
-    includeUnit: true, // Include unit symbol in formatted output
-    localize: false, // Use localized number formatting
-    locale: 'en-US', // Locale for number formatting (if localize is true)
+    includeUnit: true,
+    localize: false,
+    locale: 'en-US',
   },
 });
 
 // Now all conversions will use these settings
 const result = massConvertor.metric2Burmese(100);
-console.log(`100 grams = ${result.formatted}`); // Uses the format settings above</code></pre>
+</code></pre>
+              </div>
+            </div>
 
-            <div class="note">
-              <strong>Note:</strong> This approach makes the API cleaner and more consistent by
-              separating configuration from operation. It also prevents inconsistencies that could
-              occur when passing different settings to different methods.
+            <div class="alert alert-info d-flex align-items-center" role="alert">
+              <i class="bi bi-info-circle-fill me-2 fs-5"></i>
+              <div>
+                <strong>Note:</strong> This approach makes the API cleaner and more consistent by
+                separating configuration from operation. It also prevents inconsistencies that could
+                occur when passing different settings to different methods.
+              </div>
             </div>
           </section>
 
-          <section id="updating-data">
-            <h3>Updating Conversion Data</h3>
+          <section id="updating-data" class="mb-4">
+            <h3 class="mb-3">Updating Conversion</h3>
             <p>
               If you need to use custom conversion factors, you can update the global data using the
               <code>updateValues</code> method:
             </p>
 
-            <pre><code>// If you need to update conversion data (e.g., for custom conversion factors)
+            <div class="card">
+              <div class="card-body p-0">
+                <pre class="p-3 mb-0"><code>// If you need to update conversion data (e.g., for custom conversion factors)
 massConvertor.updateValues({
-  kyatThar: 16.5, // Custom value for kyatThar in grams
-  paeThar: 1.03125, // Custom value for paeThar in grams
+  kyatThar: 16.5, 
+  paeThar: 1.03125,
 });
 
 // All subsequent conversions will use the updated data
 const customResult = massConvertor.metric2Burmese(100);
-console.log(`100 grams with custom data = ${customResult.formatted}`);</code></pre>
+</code></pre>
+              </div>
+            </div>
           </section>
 
-          <section id="batch-conversion">
-            <h3>Batch Conversion</h3>
+          <section id="batch-conversion" class="mb-4">
+            <h3 class="mb-3">Batch Conversion</h3>
             <p>For converting multiple values at once, you can use the batch conversion methods:</p>
 
-            <pre><code>// Convert multiple values at once
+            <div class="card">
+              <div class="card-body p-0">
+                <pre class="p-3 mb-0"><code>// Convert multiple values at once
 const batchResult = lengthConvertor.batchMetric2Burmese([1, 2, 3, 4, 5]);
 
 // Process results
 batchResult.results.forEach((result) => {
   console.log(`${result.originalValue} ${result.fromUnit} = ${result.value} ${result.toUnit}`);
 });
-
-// Get summary
-console.log(
-  `Converted ${batchResult.summary.count} values from ${batchResult.summary.fromUnit} to ${batchResult.summary.toUnit}`
-);</code></pre>
+</code></pre>
+              </div>
+            </div>
           </section>
         </section>
 
-        <section id="cli">
-          <h2>Command Line Interface</h2>
+        <section id="cli" class="mb-5">
+          <h2 class="border-bottom pb-2 mb-4">Command Line Interface</h2>
           <p>The package includes a CLI for quick conversions from the terminal:</p>
 
-          <pre><code># List available units
+          <div class="card">
+            <div class="card-body p-0">
+              <pre class="p-3 mb-0"><code># List available units
 npx burmese-measure list mass
 npx burmese-measure list length
 npx burmese-measure list volume
@@ -299,265 +636,263 @@ npx burmese-measure volume --liter 13.5 --format
 # Money conversion utilities
 npx burmese-measure money --kyat 5 --pya 50 --format
 npx burmese-measure money --decimal 5.5 --format --locale en-US</code></pre>
+            </div>
+          </div>
         </section>
 
-        <section id="burmese-units">
-          <h2>Burmese Measurement Units</h2>
+        <section id="burmese-units" class="mb-5">
+          <h2 class="border-bottom pb-2 mb-4">Measurement Units</h2>
 
-          <h3>Mass Units</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Burmese unit</th>
-                <th>Metric equivalent (grams)</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>ywayLay</td>
-                <td>0.136078</td>
-                <td>Smallest mass unit</td>
-              </tr>
-              <tr>
-                <td>ywayGyi</td>
-                <td>0.272155</td>
-                <td>Double of ywayLay</td>
-              </tr>
-              <tr>
-                <td>paeThar</td>
-                <td>1.02058</td>
-                <td>1/16 of kyatThar</td>
-              </tr>
-              <tr>
-                <td>muThar</td>
-                <td>2.04117</td>
-                <td>1/8 of kyatThar</td>
-              </tr>
-              <tr>
-                <td>matThar</td>
-                <td>4.08233</td>
-                <td>1/4 of kyatThar</td>
-              </tr>
-              <tr>
-                <td>kyatThar</td>
-                <td>16.3293</td>
-                <td>Standard mass unit</td>
-              </tr>
-              <tr>
-                <td>pateThar</td>
-                <td>1632.93</td>
-                <td>100 kyatThar</td>
-              </tr>
-            </tbody>
-          </table>
+          <section id="mass-units" class="mb-4">
+            <h3 class="mb-3">Mass Units</h3>
+            <div class="table-responsive">
+              <table class="table table-striped table-hover">
+                <thead class="table-success">
+                  <tr>
+                    <th>Burmese unit</th>
+                    <th>Metric equivalent (grams)</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>ywayLay</code></td>
+                    <td>0.136078</td>
+                    <td>Smallest mass unit</td>
+                  </tr>
+                  <tr>
+                    <td><code>ywayGyi</code></td>
+                    <td>0.272155</td>
+                    <td>Double of ywayLay</td>
+                  </tr>
+                  <tr>
+                    <td><code>paeThar</code></td>
+                    <td>1.02058</td>
+                    <td>1/16 of kyatThar</td>
+                  </tr>
+                  <tr>
+                    <td><code>muThar</code></td>
+                    <td>2.04117</td>
+                    <td>1/8 of kyatThar</td>
+                  </tr>
+                  <tr>
+                    <td><code>matThar</code></td>
+                    <td>4.08233</td>
+                    <td>1/4 of kyatThar</td>
+                  </tr>
+                  <tr>
+                    <td><code>kyatThar</code></td>
+                    <td>16.3293</td>
+                    <td>Standard mass unit</td>
+                  </tr>
+                  <tr>
+                    <td><code>pateThar</code></td>
+                    <td>1632.93</td>
+                    <td>100 kyatThar</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
 
-          <h3>Length Units</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Burmese unit</th>
-                <th>Metric equivalent (meters)</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>sanchi</td>
-                <td>0.000079375</td>
-                <td>Smallest length unit</td>
-              </tr>
-              <tr>
-                <td>hnan</td>
-                <td>0.00079375</td>
-                <td>10 sanchi</td>
-              </tr>
-              <tr>
-                <td>muyaw</td>
-                <td>0.0047625</td>
-                <td>6 hnan</td>
-              </tr>
-              <tr>
-                <td>letThit</td>
-                <td>0.01905</td>
-                <td>4 muyaw, 1/24 of taung</td>
-              </tr>
-              <tr>
-                <td>maik</td>
-                <td>0.1524</td>
-                <td>8 letThit</td>
-              </tr>
-              <tr>
-                <td>htwa</td>
-                <td>0.2286</td>
-                <td>1.5 maik, 1/2 of taung</td>
-              </tr>
-              <tr>
-                <td>taung</td>
-                <td>0.4572</td>
-                <td>Standard length unit</td>
-              </tr>
-              <tr>
-                <td>lan</td>
-                <td>1.8288</td>
-                <td>4 taung</td>
-              </tr>
-              <tr>
-                <td>ta</td>
-                <td>3.2004</td>
-                <td>7 taung</td>
-              </tr>
-            </tbody>
-          </table>
+          <section id="length-units" class="mb-4">
+            <h3 class="mb-3">Length Units</h3>
+            <div class="table-responsive">
+              <table class="table table-striped table-hover">
+                <thead class="table-success">
+                  <tr>
+                    <th>Burmese unit</th>
+                    <th>Metric equivalent (meters)</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>sanchi</code></td>
+                    <td>0.000079375</td>
+                    <td>Smallest length unit</td>
+                  </tr>
+                  <tr>
+                    <td><code>hnan</code></td>
+                    <td>0.00079375</td>
+                    <td>10 sanchi</td>
+                  </tr>
+                  <tr>
+                    <td><code>muyaw</code></td>
+                    <td>0.0047625</td>
+                    <td>6 hnan</td>
+                  </tr>
+                  <tr>
+                    <td><code>letThit</code></td>
+                    <td>0.01905</td>
+                    <td>4 muyaw, 1/24 of taung</td>
+                  </tr>
+                  <tr>
+                    <td><code>maik</code></td>
+                    <td>0.1524</td>
+                    <td>8 letThit</td>
+                  </tr>
+                  <tr>
+                    <td><code>htwa</code></td>
+                    <td>0.2286</td>
+                    <td>1.5 maik, 1/2 of taung</td>
+                  </tr>
+                  <tr>
+                    <td><code>taung</code></td>
+                    <td>0.4572</td>
+                    <td>Standard length unit</td>
+                  </tr>
+                  <tr>
+                    <td><code>lan</code></td>
+                    <td>1.8288</td>
+                    <td>4 taung</td>
+                  </tr>
+                  <tr>
+                    <td><code>ta</code></td>
+                    <td>3.2004</td>
+                    <td>7 taung</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
 
-          <h3>Volume Units</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Burmese unit</th>
-                <th>Metric equivalent (liters)</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>laMyu</td>
-                <td>0.0799118</td>
-                <td>Smallest volume unit</td>
-              </tr>
-              <tr>
-                <td>laMyet</td>
-                <td>0.159824</td>
-                <td>2 laMyu</td>
-              </tr>
-              <tr>
-                <td>laMe</td>
-                <td>0.319647</td>
-                <td>2 laMyet</td>
-              </tr>
-              <tr>
-                <td>saLe</td>
-                <td>0.639294</td>
-                <td>2 laMe, 1/4 of pyi</td>
-              </tr>
-              <tr>
-                <td>hkwet</td>
-                <td>1.27859</td>
-                <td>2 saLe, 1/2 of pyi</td>
-              </tr>
-              <tr>
-                <td>pyi</td>
-                <td>2.55718</td>
-                <td>Standard volume unit</td>
-              </tr>
-              <tr>
-                <td>seit</td>
-                <td>10.2287</td>
-                <td>4 pyi</td>
-              </tr>
-              <tr>
-                <td>hkwe</td>
-                <td>20.4574</td>
-                <td>2 seit, 8 pyi</td>
-              </tr>
-              <tr>
-                <td>tin</td>
-                <td>40.9148</td>
-                <td>2 hkwe, 16 pyi</td>
-              </tr>
-            </tbody>
-          </table>
+          <section id="volume-units" class="mb-4">
+            <h3 class="mb-3">Volume Units</h3>
+            <div class="table-responsive">
+              <table class="table table-striped table-hover">
+                <thead class="table-success">
+                  <tr>
+                    <th>Burmese unit</th>
+                    <th>Metric equivalent (liters)</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>laMyu</code></td>
+                    <td>0.0799118</td>
+                    <td>Smallest volume unit</td>
+                  </tr>
+                  <tr>
+                    <td><code>laMyet</code></td>
+                    <td>0.159824</td>
+                    <td>2 laMyu</td>
+                  </tr>
+                  <tr>
+                    <td><code>laMe</code></td>
+                    <td>0.319647</td>
+                    <td>2 laMyet</td>
+                  </tr>
+                  <tr>
+                    <td><code>saLe</code></td>
+                    <td>0.639294</td>
+                    <td>2 laMe, 1/4 of pyi</td>
+                  </tr>
+                  <tr>
+                    <td><code>hkwet</code></td>
+                    <td>1.27859</td>
+                    <td>2 saLe, 1/2 of pyi</td>
+                  </tr>
+                  <tr>
+                    <td><code>pyi</code></td>
+                    <td>2.55718</td>
+                    <td>Standard volume unit</td>
+                  </tr>
+                  <tr>
+                    <td><code>seit</code></td>
+                    <td>10.2287</td>
+                    <td>4 pyi</td>
+                  </tr>
+                  <tr>
+                    <td><code>hkwe</code></td>
+                    <td>20.4574</td>
+                    <td>2 seit, 8 pyi</td>
+                  </tr>
+                  <tr>
+                    <td><code>tin</code></td>
+                    <td>40.9148</td>
+                    <td>2 hkwe, 16 pyi</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
 
-          <h3>Money Units</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Burmese unit</th>
-                <th>Value (in kyat)</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>pya</td>
-                <td>0.01</td>
-                <td>1/100 of kyat</td>
-              </tr>
-              <tr>
-                <td>mu</td>
-                <td>0.1</td>
-                <td>1/10 of kyat</td>
-              </tr>
-              <tr>
-                <td>mat</td>
-                <td>0.25</td>
-                <td>1/4 of kyat</td>
-              </tr>
-              <tr>
-                <td>kyat</td>
-                <td>1</td>
-                <td>Standard currency unit</td>
-              </tr>
-            </tbody>
-          </table>
+          <section id="money-units" class="mb-4">
+            <h3 class="mb-3">Money Units</h3>
+            <div class="table-responsive">
+              <table class="table table-striped table-hover">
+                <thead class="table-success">
+                  <tr>
+                    <th>Burmese unit</th>
+                    <th>Value (in kyat)</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>pya</code></td>
+                    <td>0.01</td>
+                    <td>1/100 of kyat</td>
+                  </tr>
+                  <tr>
+                    <td><code>mu</code></td>
+                    <td>0.1</td>
+                    <td>1/10 of kyat</td>
+                  </tr>
+                  <tr>
+                    <td><code>mat</code></td>
+                    <td>0.25</td>
+                    <td>1/4 of kyat</td>
+                  </tr>
+                  <tr>
+                    <td><code>kyat</code></td>
+                    <td>1</td>
+                    <td>Standard currency unit</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
         </section>
       </div>
     </div>
 
-    <div class="footer">
-      <div class="footer-links">
-        <a href="https://github.com/waiphyo285/burmese-measure" target="_blank">GitHub</a>
-        <a href="index.html">Documentation</a>
-        <a href="demo.html">Demo</a>
+    <footer class="border-top mt-5 py-4">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12 text-center">
+            <div class="mb-3">
+              <a href="https://github.com/waiphyo285/burmese-measure" class="text-decoration-none text-success mx-2"
+                target="_blank">GitHub</a>
+              <a href="index.html" class="text-decoration-none text-success mx-2">Documentation</a>
+              <a href="demo.html" class="text-decoration-none text-success mx-2">Demo</a>
+            </div>
+            <p class="text-muted mb-0">© 2021-2025 Wai Phyo Naing</p>
+          </div>
+        </div>
       </div>
-      <p>© 2021-2025 Wai Phyo Naing</p>
-    </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-      // Mobile menu toggle functionality
+      // Auto-expand submenu if a child link is the current page anchor
       document.addEventListener('DOMContentLoaded', function () {
-        const menuToggle = document.querySelector('.menu-toggle');
-        const sidebar = document.querySelector('.sidebar');
-
-        if (menuToggle && sidebar) {
-          menuToggle.addEventListener('click', function () {
-            sidebar.classList.toggle('active');
-            menuToggle.textContent = sidebar.classList.contains('active')
-              ? 'Hide Menu'
-              : 'Documentation Menu';
-          });
-        }
-
-        // Submenu functionality
-        const menuItems = document.querySelectorAll('.menu-item.has-submenu');
-
-        menuItems.forEach((item) => {
-          item.addEventListener('click', function () {
-            // Toggle active class on the clicked menu item
-            this.classList.toggle('active');
-
-            // Toggle the submenu visibility
-            const submenu = this.nextElementSibling;
-            if (submenu && submenu.classList.contains('submenu')) {
-              submenu.classList.toggle('active');
-            }
-          });
-        });
-
-        // Auto-expand submenu if a child link is the current page anchor
         function checkCurrentSection() {
           const hash = window.location.hash;
           if (hash) {
+            // Find the link that matches the hash
             const targetLink = document.querySelector(`a[href="${hash}"]`);
             if (targetLink) {
-              // Find parent submenu
-              const parentSubmenu = targetLink.closest('.submenu');
-              if (parentSubmenu) {
-                parentSubmenu.classList.add('active');
-                const parentMenuItem = parentSubmenu.previousElementSibling;
-                if (parentMenuItem && parentMenuItem.classList.contains('menu-item')) {
-                  parentMenuItem.classList.add('active');
-                }
+              // Find parent accordion collapse
+              const parentCollapse = targetLink.closest('.accordion-collapse');
+              if (parentCollapse) {
+                // Show the collapse
+                const bsCollapse = new bootstrap.Collapse(parentCollapse);
+                bsCollapse.show();
               }
             }
           }
@@ -568,5 +903,6 @@ npx burmese-measure money --decimal 5.5 --format --locale en-US</code></pre>
         window.addEventListener('hashchange', checkCurrentSection);
       });
     </script>
-  </body>
+</body>
+
 </html>
