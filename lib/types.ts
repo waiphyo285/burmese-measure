@@ -123,7 +123,7 @@ export interface Money {
 /**
  * Union type for all unit data types
  */
-export type UData = Mass | Volume | Money | Length;
+export type BMU = Mass | Volume | Money | Length;
 
 /**
  * Result of a conversion operation with formatted output

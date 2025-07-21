@@ -147,10 +147,6 @@ npx burmese-measure list length
 npx burmese-measure list volume
 npx burmese-measure list money
 
-# Convert between units
-npx burmese-measure convert 100 gram kyatThar --category mass
-npx burmese-measure convert 2 meter lan --category length --format
-
 # Mass conversion utilities
 npx burmese-measure mass --kyat 5 --pae 3 --format
 npx burmese-measure mass --gram 100 --format
@@ -225,31 +221,41 @@ npx burmese-measure money --decimal 5.5 --format --locale en-US
 
 ## Advanced Usage
 
-### Custom Settings
+### Global Settings and Data
+
+The library uses a global approach for both settings and conversion data. Instead of passing settings or custom data to each conversion method, you should update the global settings and data first and then perform conversions:
 
 ```javascript
-// Change decimal places and target unit
+// Update global settings for the converter
 massConvertor.updateSettings({
-  decimal: 2,
-  from: 'gram',
-  to: 'paeThar',
+  decimal: 2, // Number of decimal places in results
+  from: 'gram', // Source unit
+  to: 'paeThar', // Target unit
   format: {
-    includeUnit: true,
-    localize: false,
+    includeUnit: true, // Include unit symbol in formatted output
+    localize: false, // Use localized number formatting
+    locale: 'en-US', // Locale for number formatting (if localize is true)
   },
 });
 
-// Convert with custom settings
-const result = massConvertor.metric2Burmese(
-  100,
-  {},
-  {
-    decimal: 3,
-    from: 'gram',
-    to: 'ywayGyi',
-  }
-);
+// Now all conversions will use these settings
+const result = massConvertor.metric2Burmese(100);
+console.log(`100 grams = ${result.formatted}`); // Uses the format settings above
+
+// If you need to update conversion data (e.g., for custom conversion factors)
+massConvertor.updateValues({
+  kyatThar: 16.5, // Custom value for kyatThar in grams
+  paeThar: 1.03125, // Custom value for paeThar in grams
+});
+
+// All subsequent conversions will use the updated data
+const customResult = massConvertor.metric2Burmese(100);
+console.log(`100 grams with custom data = ${customResult.formatted}`);
 ```
+
+This approach makes the API cleaner and more consistent by separating configuration from operation. It also prevents inconsistencies that could occur when passing different settings to different methods.
+
+````
 
 ### Batch Conversion
 
@@ -266,7 +272,7 @@ batchResult.results.forEach((result) => {
 console.log(
   `Converted ${batchResult.summary.count} values from ${batchResult.summary.fromUnit} to ${batchResult.summary.toUnit}`
 );
-```
+````
 
 ### Formatting
 

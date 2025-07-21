@@ -1,4 +1,5 @@
 import constants, { MASS, LENGTH, VOLUME, MONEY } from './constant';
+import * as helpers from './helpers';
 import {
   exchangeUnit,
   validateNumber,
@@ -7,12 +8,13 @@ import {
   createBatchResult,
   roundToDecimals,
 } from './helpers';
+
 import {
+  BMU,
+  Setting,
   Length,
   Mass,
   Money,
-  Setting,
-  UData,
   Volume,
   ConversionResult,
   BatchConversionResult,
@@ -22,7 +24,7 @@ import {
 /**
  * Base abstract class for all unit converters
  */
-abstract class Convertor<T extends UData> {
+abstract class Convertor<T extends BMU> {
   protected data: T;
   protected setting: Setting;
   protected symbols: Record<string, string>;
@@ -52,95 +54,78 @@ abstract class Convertor<T extends UData> {
   /**
    * Converts a value from metric to Burmese units
    * @param value - Value to convert
-   * @param customData - Optional custom conversion data
-   * @param customSetting - Optional custom settings
    * @returns Conversion result
    */
-  public metric2Burmese(
-    value: number,
-    customData?: Partial<T>,
-    customSetting?: Partial<Setting>
-  ): ConversionResult {
+  public metric2Burmese(value: number): ConversionResult {
     validateNumber(value);
 
-    const nData = this.build(this.data, customData || {});
-    const nSetting = this.build(this.setting, customSetting || {});
+    // For metric to Burmese conversion, we need to divide by the conversion factor
+    // since the data values are in metric units per Burmese unit
+    const result = roundToDecimals(
+      value / (this.data as any)[this.setting.to],
+      this.setting.decimal
+    );
 
-    const result = roundToDecimals((nData as any)[nSetting.to] * value, nSetting.decimal);
-
-    return createConversionResult(result, value, nSetting.from, nSetting.to, nSetting.format);
+    return createConversionResult(
+      result,
+      value,
+      this.setting.from,
+      this.setting.to,
+      this.setting.format
+    );
   }
 
   /**
    * Converts a value from Burmese to metric units
    * @param value - Value to convert
-   * @param customData - Optional custom conversion data
-   * @param customSetting - Optional custom settings
    * @returns Conversion result
    */
-  public burmese2Metric(
-    value: number,
-    customData?: Partial<T>,
-    customSetting?: Partial<Setting>
-  ): ConversionResult {
+  public burmese2Metric(value: number): ConversionResult {
     validateNumber(value);
 
-    const nData = this.build(this.data, customData || {});
-    const nSetting = this.build(
-      this.setting,
-      customSetting
-        ? { ...customSetting, ...exchangeUnit(this.setting) }
-        : exchangeUnit(this.setting)
+    const exchangedSetting = exchangeUnit(this.setting);
+
+    // For Burmese to metric conversion, we multiply by the conversion factor
+    // since the data values are in metric units per Burmese unit
+    const result = roundToDecimals(
+      value * (this.data as any)[exchangedSetting.from],
+      exchangedSetting.decimal
     );
 
-    const result = roundToDecimals(value / (nData as any)[nSetting.from], nSetting.decimal);
-
-    return createConversionResult(result, value, nSetting.from, nSetting.to, nSetting.format);
+    return createConversionResult(
+      result,
+      value,
+      exchangedSetting.from,
+      exchangedSetting.to,
+      exchangedSetting.format
+    );
   }
 
   /**
    * Converts a batch of values from metric to Burmese units
    * @param values - Array of values to convert
-   * @param customData - Optional custom conversion data
-   * @param customSetting - Optional custom settings
    * @returns Batch conversion result
    */
-  public batchMetric2Burmese(
-    values: number[],
-    customData?: Partial<T>,
-    customSetting?: Partial<Setting>
-  ): BatchConversionResult {
+  public batchMetric2Burmese(values: number[]): BatchConversionResult {
     validateNumberArray(values);
 
-    const nSetting = this.build(this.setting, customSetting || {});
-    const results = values.map((value) => this.metric2Burmese(value, customData, customSetting));
+    const results = values.map((value) => this.metric2Burmese(value));
 
-    return createBatchResult(results, nSetting.from, nSetting.to);
+    return createBatchResult(results, this.setting.from, this.setting.to);
   }
 
   /**
    * Converts a batch of values from Burmese to metric units
    * @param values - Array of values to convert
-   * @param customData - Optional custom conversion data
-   * @param customSetting - Optional custom settings
    * @returns Batch conversion result
    */
-  public batchBurmese2Metric(
-    values: number[],
-    customData?: Partial<T>,
-    customSetting?: Partial<Setting>
-  ): BatchConversionResult {
+  public batchBurmese2Metric(values: number[]): BatchConversionResult {
     validateNumberArray(values);
 
-    const nSetting = this.build(
-      this.setting,
-      customSetting
-        ? { ...customSetting, ...exchangeUnit(this.setting) }
-        : exchangeUnit(this.setting)
-    );
-    const results = values.map((value) => this.burmese2Metric(value, customData, customSetting));
+    const exchangedSetting = exchangeUnit(this.setting);
+    const results = values.map((value) => this.burmese2Metric(value));
 
-    return createBatchResult(results, nSetting.from, nSetting.to);
+    return createBatchResult(results, exchangedSetting.from, exchangedSetting.to);
   }
 
   /**
@@ -164,11 +149,11 @@ abstract class Convertor<T extends UData> {
 
   /**
    * Updates the converter data
-   * @param newData - New data to apply
+   * @param newValues - New values to apply
    * @returns This converter instance for chaining
    */
-  public updateData(newData: Partial<T>): this {
-    this.data = this.build(this.data, newData);
+  public updateValues(newValues: Partial<T>): this {
+    this.data = this.build(this.data, newValues);
     return this;
   }
 }
@@ -191,26 +176,16 @@ class MassConvertor extends Convertor<Mass> {
    * Converts kyat and pae to grams
    * @param kyat - Number of kyat
    * @param pae - Number of pae (1/16 of kyat)
-   * @param customData - Optional custom conversion data
-   * @param customSetting - Optional custom settings
    * @returns Conversion result in grams
    */
-  public kyatPae2Gram(
-    kyat: number,
-    pae: number = 0,
-    customData?: Partial<Mass>,
-    customSetting?: Partial<Setting>
-  ): ConversionResult {
+  public kyatPae2Gram(kyat: number, pae: number = 0): ConversionResult {
     validateNumber(kyat);
     validateNumber(pae);
 
-    const nData = this.build(this.data, customData || {});
-    const nSetting = this.build(this.setting, customSetting || {});
-
     const temp = kyat + (pae > 0 ? pae / 16 : 0);
-    const gram = roundToDecimals(temp * nData.kyatThar, nSetting.decimal);
+    const gram = roundToDecimals(temp * this.data.kyatThar, this.setting.decimal);
 
-    return createConversionResult(gram, kyat + pae / 16, 'kyat_pae', 'gram', nSetting.format);
+    return createConversionResult(gram, kyat + pae / 16, 'kyat_pae', 'gram', this.setting.format);
   }
 
   /**
@@ -218,58 +193,30 @@ class MassConvertor extends Convertor<Mass> {
    * @param kyat - Number of kyat
    * @param pae - Number of pae (1/16 of kyat)
    * @param yway - Number of yway (1/8 of pae, 1/128 of kyat)
-   * @param customData - Optional custom conversion data
-   * @param customSetting - Optional custom settings
    * @returns Conversion result in grams
    */
-  public kyatPaeYway2Gram(
-    kyat: number,
-    pae: number = 0,
-    yway: number = 0,
-    customData?: Partial<Mass>,
-    customSetting?: Partial<Setting>
-  ): ConversionResult {
+  public kyatPaeYway2Gram(kyat: number, pae: number = 0, yway: number = 0): ConversionResult {
     validateNumber(kyat);
     validateNumber(pae);
     validateNumber(yway);
 
-    const nData = this.build(this.data, customData || {});
-    const nSetting = this.build(this.setting, customSetting || {});
-
     const temp = kyat + (pae > 0 ? pae / 16 : 0) + (yway > 0 ? yway / 128 : 0);
-    const gram = roundToDecimals(temp * nData.kyatThar, nSetting.decimal);
+    const gram = roundToDecimals(temp * this.data.kyatThar, this.setting.decimal);
 
-    return createConversionResult(gram, temp, 'kyat_pae_yway', 'gram', nSetting.format);
+    return createConversionResult(gram, temp, 'kyat_pae_yway', 'gram', this.setting.format);
   }
 
   /**
    * Converts grams to kyat and pae
    * @param gram - Number of grams
-   * @param customData - Optional custom conversion data
-   * @param customSetting - Optional custom settings
    * @returns Array with [kyat, pae]
    */
-  public gram2KyatPae(
-    gram: number,
-    customData?: Partial<Mass>,
-    customSetting?: Partial<Setting>
-  ): number[] {
+  public gram2KyatPae(gram: number): number[] {
     validateNumber(gram);
 
-    const nData = this.build(this.data, customData || {});
-    const nSetting = this.build(this.setting, customSetting || {});
-
-    let temp = gram / nData.kyatThar;
-    let kyat = 0;
-    let pae = 0;
-
-    if (temp % 1 === 0) {
-      kyat = temp;
-    } else {
-      kyat = Math.floor(temp);
-      temp = kyat > 0 ? (temp % kyat) * 16 : temp * 16;
-      pae = roundToDecimals(temp, nSetting.decimal);
-    }
+    const temp = gram / this.data.kyatThar;
+    const kyat = Math.floor(temp);
+    const pae = roundToDecimals((temp - kyat) * 16, this.setting.decimal);
 
     return [kyat, pae];
   }
@@ -277,34 +224,19 @@ class MassConvertor extends Convertor<Mass> {
   /**
    * Converts grams to kyat, pae, and yway
    * @param gram - Number of grams
-   * @param customData - Optional custom conversion data
-   * @param customSetting - Optional custom settings
    * @returns Array with [kyat, pae, yway]
    */
-  public gram2KyatPaeYway(
-    gram: number,
-    customData?: Partial<Mass>,
-    customSetting?: Partial<Setting>
-  ): number[] {
+  public gram2KyatPaeYway(gram: number): number[] {
     validateNumber(gram);
 
-    const nData = this.build(this.data, customData || {});
-    const nSetting = this.build(this.setting, customSetting || {});
+    const temp = gram / this.data.kyatThar;
+    const kyat = Math.floor(temp);
+    let remainder = temp - kyat;
 
-    let temp = gram / nData.kyatThar;
-    let kyat = 0;
-    let pae = 0;
-    let yway = 0;
+    const pae = Math.floor(remainder * 16);
+    remainder = remainder * 16 - pae;
 
-    if (temp % 1 === 0) {
-      kyat = temp;
-    } else {
-      kyat = Math.floor(temp);
-      temp = kyat > 0 ? (temp % kyat) * 16 : temp * 16;
-      pae = Math.floor(temp);
-      temp = pae > 0 ? (temp % pae) * 8 : temp * 8;
-      yway = roundToDecimals(temp, nSetting.decimal);
-    }
+    const yway = roundToDecimals(remainder * 8, this.setting.decimal);
 
     return [kyat, pae, yway];
   }
@@ -312,16 +244,10 @@ class MassConvertor extends Convertor<Mass> {
   /**
    * Formats a gram value as kyat, pae, and yway
    * @param gram - Number of grams
-   * @param customData - Optional custom conversion data
-   * @param customSetting - Optional custom settings
    * @returns Formatted string (e.g., "5 kyat 3 pae 2 yway")
    */
-  public formatGramAsKyatPaeYway(
-    gram: number,
-    customData?: Partial<Mass>,
-    customSetting?: Partial<Setting>
-  ): string {
-    const [kyat, pae, yway] = this.gram2KyatPaeYway(gram, customData, customSetting);
+  public formatGramAsKyatPaeYway(gram: number): string {
+    const [kyat, pae, yway] = this.gram2KyatPaeYway(gram);
     let result = '';
 
     if (kyat > 0) {
@@ -362,56 +288,29 @@ class LengthConvertor extends Convertor<Length> {
    * Converts taung and let-thit to meters
    * @param taung - Number of taung
    * @param letThit - Number of let-thit (1/24 of taung)
-   * @param customData - Optional custom conversion data
-   * @param customSetting - Optional custom settings
    * @returns Conversion result in meters
    */
-  public taungLetThit2Meter(
-    taung: number,
-    letThit: number = 0,
-    customData?: Partial<Length>,
-    customSetting?: Partial<Setting>
-  ): ConversionResult {
+  public taungLetThit2Meter(taung: number, letThit: number = 0): ConversionResult {
     validateNumber(taung);
     validateNumber(letThit);
 
-    const nData = this.build(this.data, customData || {});
-    const nSetting = this.build(this.setting, customSetting || {});
-
     const temp = taung + (letThit > 0 ? letThit / 24 : 0);
-    const meter = roundToDecimals(temp * nData.taung, nSetting.decimal);
+    const meter = roundToDecimals(temp * this.data.taung, this.setting.decimal);
 
-    return createConversionResult(meter, temp, 'taung_letthit', 'meter', nSetting.format);
+    return createConversionResult(meter, temp, 'taung_letthit', 'meter', this.setting.format);
   }
 
   /**
    * Converts meters to taung and let-thit
    * @param meter - Number of meters
-   * @param customData - Optional custom conversion data
-   * @param customSetting - Optional custom settings
    * @returns Array with [taung, letThit]
    */
-  public meter2TaungLetThit(
-    meter: number,
-    customData?: Partial<Length>,
-    customSetting?: Partial<Setting>
-  ): number[] {
+  public meter2TaungLetThit(meter: number): number[] {
     validateNumber(meter);
 
-    const nData = this.build(this.data, customData || {});
-    const nSetting = this.build(this.setting, customSetting || {});
-
-    let temp = meter / nData.taung;
-    let taung = 0;
-    let letThit = 0;
-
-    if (temp % 1 === 0) {
-      taung = temp;
-    } else {
-      taung = Math.floor(temp);
-      temp = taung > 0 ? (temp % taung) * 24 : temp * 24;
-      letThit = roundToDecimals(temp, nSetting.decimal);
-    }
+    const temp = meter / this.data.taung;
+    const taung = Math.floor(temp);
+    const letThit = roundToDecimals((temp - taung) * 24, this.setting.decimal);
 
     return [taung, letThit];
   }
@@ -419,16 +318,10 @@ class LengthConvertor extends Convertor<Length> {
   /**
    * Formats a meter value as taung and let-thit
    * @param meter - Number of meters
-   * @param customData - Optional custom conversion data
-   * @param customSetting - Optional custom settings
    * @returns Formatted string (e.g., "5 taung 3 let thit")
    */
-  public formatMeterAsTaungLetThit(
-    meter: number,
-    customData?: Partial<Length>,
-    customSetting?: Partial<Setting>
-  ): string {
-    const [taung, letThit] = this.meter2TaungLetThit(meter, customData, customSetting);
+  public formatMeterAsTaungLetThit(meter: number): string {
+    const [taung, letThit] = this.meter2TaungLetThit(meter);
     let result = '';
 
     if (taung > 0) {
@@ -463,56 +356,29 @@ class VolumeConvertor extends Convertor<Volume> {
    * Converts pyi and sa-le to liters
    * @param pyi - Number of pyi
    * @param saLe - Number of sa-le (1/4 of pyi)
-   * @param customData - Optional custom conversion data
-   * @param customSetting - Optional custom settings
    * @returns Conversion result in liters
    */
-  public pyiSaLe2Liter(
-    pyi: number,
-    saLe: number = 0,
-    customData?: Partial<Volume>,
-    customSetting?: Partial<Setting>
-  ): ConversionResult {
+  public pyiSaLe2Liter(pyi: number, saLe: number = 0): ConversionResult {
     validateNumber(pyi);
     validateNumber(saLe);
 
-    const nData = this.build(this.data, customData || {});
-    const nSetting = this.build(this.setting, customSetting || {});
-
     const temp = pyi + (saLe > 0 ? saLe / 4 : 0);
-    const liter = roundToDecimals(temp * nData.pyi, nSetting.decimal);
+    const liter = roundToDecimals(temp * this.data.pyi, this.setting.decimal);
 
-    return createConversionResult(liter, temp, 'pyi_sale', 'liter', nSetting.format);
+    return createConversionResult(liter, temp, 'pyi_sale', 'liter', this.setting.format);
   }
 
   /**
    * Converts liters to pyi and sa-le
    * @param liter - Number of liters
-   * @param customData - Optional custom conversion data
-   * @param customSetting - Optional custom settings
    * @returns Array with [pyi, saLe]
    */
-  public liter2PyiSaLe(
-    liter: number,
-    customData?: Partial<Volume>,
-    customSetting?: Partial<Setting>
-  ): number[] {
+  public liter2PyiSaLe(liter: number): number[] {
     validateNumber(liter);
 
-    const nData = this.build(this.data, customData || {});
-    const nSetting = this.build(this.setting, customSetting || {});
-
-    let temp = liter / nData.pyi;
-    let pyi = 0;
-    let saLe = 0;
-
-    if (temp % 1 === 0) {
-      pyi = temp;
-    } else {
-      pyi = Math.floor(temp);
-      temp = pyi > 0 ? (temp % pyi) * 4 : temp * 4;
-      saLe = roundToDecimals(temp, nSetting.decimal);
-    }
+    const temp = liter / this.data.pyi;
+    const pyi = Math.floor(temp);
+    const saLe = roundToDecimals((temp - pyi) * 4, this.setting.decimal);
 
     return [pyi, saLe];
   }
@@ -520,16 +386,10 @@ class VolumeConvertor extends Convertor<Volume> {
   /**
    * Formats a liter value as pyi and sa-le
    * @param liter - Number of liters
-   * @param customData - Optional custom conversion data
-   * @param customSetting - Optional custom settings
    * @returns Formatted string (e.g., "5 pyi 2 sa le")
    */
-  public formatLiterAsPyiSaLe(
-    liter: number,
-    customData?: Partial<Volume>,
-    customSetting?: Partial<Setting>
-  ): string {
-    const [pyi, saLe] = this.liter2PyiSaLe(liter, customData, customSetting);
+  public formatLiterAsPyiSaLe(liter: number): string {
+    const [pyi, saLe] = this.liter2PyiSaLe(liter);
     let result = '';
 
     if (pyi > 0) {
@@ -562,38 +422,29 @@ class MoneyConvertor extends Convertor<Money> {
    * Converts kyat and pya to decimal kyat
    * @param kyat - Number of kyat
    * @param pya - Number of pya (1/100 of kyat)
-   * @param _customData - Optional custom conversion data (unused)
-   * @param customSetting - Optional custom settings
    * @returns Conversion result in decimal kyat
    */
-  public kyatPya2Decimal(
-    kyat: number,
-    pya: number = 0,
-    _customData?: Partial<Money>,
-    customSetting?: Partial<Setting>
-  ): ConversionResult {
+  public kyatPya2Decimal(kyat: number, pya: number = 0): ConversionResult {
     validateNumber(kyat);
     validateNumber(pya);
 
-    const nSetting = this.build(this.setting, customSetting || {});
+    const decimal = roundToDecimals(kyat + pya / 100, this.setting.decimal);
 
-    const decimal = roundToDecimals(kyat + pya / 100, nSetting.decimal);
-
-    return createConversionResult(decimal, kyat + pya / 100, 'kyat_pya', 'kyat', nSetting.format);
+    return createConversionResult(
+      decimal,
+      kyat + pya / 100,
+      'kyat_pya',
+      'kyat',
+      this.setting.format
+    );
   }
 
   /**
    * Converts decimal kyat to kyat and pya
    * @param decimal - Decimal kyat amount
-   * @param _customData - Optional custom conversion data (unused)
-   * @param _customSetting - Optional custom settings (unused)
    * @returns Array with [kyat, pya]
    */
-  public decimal2KyatPya(
-    decimal: number,
-    _customData?: Partial<Money>,
-    _customSetting?: Partial<Setting>
-  ): number[] {
+  public decimal2KyatPya(decimal: number): number[] {
     validateNumber(decimal);
 
     // No need to use settings here, just do the calculation directly
@@ -606,19 +457,12 @@ class MoneyConvertor extends Convertor<Money> {
   /**
    * Formats a decimal kyat value as kyat and pya
    * @param decimal - Decimal kyat amount
-   * @param _customData - Optional custom conversion data (unused)
-   * @param customSetting - Optional custom settings
    * @returns Formatted string (e.g., "5 Ks 50 pya" or "5.50 Ks")
    */
-  public formatDecimalAsKyatPya(
-    decimal: number,
-    _customData?: Partial<Money>,
-    customSetting?: Partial<Setting>
-  ): string {
+  public formatDecimalAsKyatPya(decimal: number): string {
     validateNumber(decimal);
 
-    const nSetting = this.build(this.setting, customSetting || {});
-    const format = nSetting.format || {};
+    const format = this.setting.format || {};
 
     if (format.localize) {
       return new Intl.NumberFormat(format.locale || 'my-MM', {
@@ -681,6 +525,10 @@ const createConverter = (category: MeasurementCategory): Convertor<any> => {
 
 // Export all converters and utilities
 export {
+  MASS,
+  LENGTH,
+  VOLUME,
+  MONEY,
   massConvertor,
   lengthConvertor,
   volumeConvertor,
@@ -691,8 +539,5 @@ export {
   LengthConvertor,
   VolumeConvertor,
   MoneyConvertor,
-  MASS,
-  LENGTH,
-  VOLUME,
-  MONEY,
+  helpers,
 };

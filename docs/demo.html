@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Interactive demo for the Burmese Measure library - try converting between Burmese measurement units and the metric system"
+    />
+    <title>Burmese Measure - Demo</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <a href="index.html" class="header-logo">Burmese Measure</a>
+      <nav class="header-nav">
+        <a href="index.html">Documentation</a>
+        <a href="demo.html" class="active">Demo</a>
+        <a href="https://github.com/waiphyo285/burmese-measure" target="_blank">GitHub</a>
+      </nav>
+    </header>
+
+    <div class="container">
+      <div
+        style="
+          background-color: #fff3cd;
+          color: #856404;
+          padding: 20px;
+          border-radius: 4px;
+          margin-bottom: 20px;
+        "
+      >
+        <strong>Demo Mode:</strong> This is a simulation of the
+        <code>burmese-measure</code> package. In a real application, you would import the actual
+        package using: <code> npm install burmese-measure</code>.
+      </div>
+
+      <!-- Mass Converter -->
+      <div class="converter">
+        <h2>Mass Converter</h2>
+        <div class="form-group">
+          <label for="mass-value">Value:</label>
+          <input type="number" id="mass-value" step="0.01" value="100" />
+        </div>
+        <div class="form-group">
+          <label for="mass-from">From:</label>
+          <select id="mass-from">
+            <option value="gram">Gram (g)</option>
+            <option value="kyatThar">Kyat</option>
+            <option value="paeThar">Pae</option>
+            <option value="ywayGyi">Yway</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="mass-to">To:</label>
+          <select id="mass-to">
+            <option value="kyatThar">Kyat</option>
+            <option value="gram">Gram (g)</option>
+            <option value="paeThar">Pae</option>
+            <option value="ywayGyi">Yway</option>
+          </select>
+        </div>
+        <button id="mass-convert">Convert</button>
+        <div class="result" id="mass-result"></div>
+      </div>
+
+      <!-- Length Converter -->
+      <div class="converter">
+        <h2>Length Converter</h2>
+        <div class="form-group">
+          <label for="length-value">Value:</label>
+          <input type="number" id="length-value" step="0.01" value="1" />
+        </div>
+        <div class="form-group">
+          <label for="length-from">From:</label>
+          <select id="length-from">
+            <option value="meter">Meter (m)</option>
+            <option value="taung">Taung</option>
+            <option value="lan">Lan</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="length-to">To:</label>
+          <select id="length-to">
+            <option value="taung">Taung</option>
+            <option value="meter">Meter (m)</option>
+            <option value="lan">Lan</option>
+          </select>
+        </div>
+        <button id="length-convert">Convert</button>
+        <div class="result" id="length-result"></div>
+        <div class="error" id="length-error" style="color: red; margin-top: 10px"></div>
+      </div>
+
+      <!-- Volume Converter -->
+      <div class="converter">
+        <h2>Volume Converter</h2>
+        <div class="form-group">
+          <label for="volume-value">Value:</label>
+          <input type="number" id="volume-value" step="0.01" value="1" />
+        </div>
+        <div class="form-group">
+          <label for="volume-from">From:</label>
+          <select id="volume-from">
+            <option value="liter">Liter (L)</option>
+            <option value="pyi">Pyi</option>
+            <option value="tin">Tin</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="volume-to">To:</label>
+          <select id="volume-to">
+            <option value="pyi">Pyi</option>
+            <option value="liter">Liter (L)</option>
+            <option value="tin">Tin</option>
+          </select>
+        </div>
+        <button id="volume-convert">Convert</button>
+        <div class="result" id="volume-result"></div>
+      </div>
+
+      <!-- Money Converter -->
+      <div class="converter">
+        <h2>Money Converter</h2>
+        <div class="form-group">
+          <label for="money-kyat">Kyat:</label>
+          <input type="number" id="money-kyat" step="1" value="1000" />
+        </div>
+        <div class="form-group">
+          <label for="money-pya">Pya:</label>
+          <input type="number" id="money-pya" step="1" value="50" />
+        </div>
+        <div class="form-group">
+          <label for="money-locale">Format Locale:</label>
+          <select id="money-locale">
+            <option value="my-MM">Myanmar (my-MM)</option>
+            <option value="en-US">English (en-US)</option>
+            <option value="th-TH">Thai (th-TH)</option>
+          </select>
+        </div>
+        <button id="money-convert">Format</button>
+        <div class="result" id="money-result"></div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-links">
+        <a href="https://github.com/waiphyo285/burmese-measure" target="_blank">GitHub</a>
+        <a href="index.html">Documentation</a>
+        <a href="demo.html">Demo</a>
+      </div>
+      <p>© 2021-2025 Wai Phyo Naing</p>
+    </div>
+
+    <script type="module">
+      // In a real application, you would import from the npm package
+      // import { massConvertor, lengthConvertor, volumeConvertor, moneyConvertor } from 'burmese-measure';
+
+      // For demo purposes, we'll use a placeholder that simulates the package behavior
+      const simulatePackage = () => {
+        const formatNumber = (value, decimals = 6) => {
+          return Number(value.toFixed(decimals));
+        };
+
+        // Simulated conversion data
+        const massData = {
+          kyatThar: 16.3293,
+          paeThar: 1.02058,
+          ywayGyi: 0.272155,
+        };
+
+        const lengthData = {
+          taung: 0.4572,
+          lan: 1.8288,
+        };
+
+        const volumeData = {
+          pyi: 2.55718,
+          tin: 40.9148,
+        };
+
+        // Simulated converters with the new global settings approach
+        const massConvertor = {
+          settings: {
+            decimal: 6,
+            from: 'gram',
+            to: 'kyatThar',
+            format: {
+              includeUnit: true,
+              localize: false,
+              locale: 'en-US',
+            },
+          },
+          data: { ...massData },
+          updateSettings(newSettings) {
+            this.settings = { ...this.settings, ...newSettings };
+            return this;
+          },
+          updateValues(newData) {
+            this.data = { ...this.data, ...newData };
+            return this;
+          },
+          metric2Burmese(value) {
+            const result = formatNumber(value / this.data[this.settings.to], this.settings.decimal);
+            return {
+              value: result,
+              originalValue: value,
+              fromUnit: this.settings.from,
+              toUnit: this.settings.to,
+              formatted: `${result} ${this.settings.to}`,
+            };
+          },
+          burmese2Metric(value) {
+            const result = formatNumber(
+              value * this.data[this.settings.from],
+              this.settings.decimal
+            );
+            return {
+              value: result,
+              originalValue: value,
+              fromUnit: this.settings.from,
+              toUnit: this.settings.to,
+              formatted: `${result} ${this.settings.to}`,
+            };
+          },
+        };
+
+        const lengthConvertor = {
+          settings: {
+            decimal: 6,
+            from: 'meter',
+            to: 'taung',
+            format: {
+              includeUnit: true,
+              localize: false,
+              locale: 'en-US',
+            },
+          },
+          data: { ...lengthData },
+          updateSettings(newSettings) {
+            this.settings = { ...this.settings, ...newSettings };
+            return this;
+          },
+          updateValues(newData) {
+            this.data = { ...this.data, ...newData };
+            return this;
+          },
+          metric2Burmese(value) {
+            const result = formatNumber(value / this.data[this.settings.to], this.settings.decimal);
+            return {
+              value: result,
+              originalValue: value,
+              fromUnit: this.settings.from,
+              toUnit: this.settings.to,
+              formatted: `${result} ${this.settings.to}`,
+            };
+          },
+          burmese2Metric(value) {
+            const result = formatNumber(
+              value * this.data[this.settings.from],
+              this.settings.decimal
+            );
+            return {
+              value: result,
+              originalValue: value,
+              fromUnit: this.settings.from,
+              toUnit: this.settings.to,
+              formatted: `${result} ${this.settings.to}`,
+            };
+          },
+        };
+
+        const volumeConvertor = {
+          settings: {
+            decimal: 6,
+            from: 'liter',
+            to: 'pyi',
+            format: {
+              includeUnit: true,
+              localize: false,
+              locale: 'en-US',
+            },
+          },
+          data: { ...volumeData },
+          updateSettings(newSettings) {
+            this.settings = { ...this.settings, ...newSettings };
+            return this;
+          },
+          updateValues(newData) {
+            this.data = { ...this.data, ...newData };
+            return this;
+          },
+          metric2Burmese(value) {
+            const result = formatNumber(value / this.data[this.settings.to], this.settings.decimal);
+            return {
+              value: result,
+              originalValue: value,
+              fromUnit: this.settings.from,
+              toUnit: this.settings.to,
+              formatted: `${result} ${this.settings.to}`,
+            };
+          },
+          burmese2Metric(value) {
+            const result = formatNumber(
+              value * this.data[this.settings.from],
+              this.settings.decimal
+            );
+            return {
+              value: result,
+              originalValue: value,
+              fromUnit: this.settings.from,
+              toUnit: this.settings.to,
+              formatted: `${result} ${this.settings.to}`,
+            };
+          },
+        };
+
+        const moneyConvertor = {
+          settings: {
+            decimal: 2,
+            format: {
+              localize: true,
+              locale: 'my-MM',
+            },
+          },
+          updateSettings(newSettings) {
+            this.settings = { ...this.settings, ...newSettings };
+            return this;
+          },
+          kyatPya2Decimal(kyat, pya = 0) {
+            const decimal = formatNumber(kyat + pya / 100, this.settings.decimal);
+            return {
+              value: decimal,
+              originalValue: kyat + pya / 100,
+              fromUnit: 'kyat_pya',
+              toUnit: 'kyat',
+              formatted: this.formatDecimalAsKyatPya(decimal),
+            };
+          },
+          formatDecimalAsKyatPya(decimal) {
+            if (this.settings.format.localize) {
+              return new Intl.NumberFormat(this.settings.format.locale, {
+                style: 'currency',
+                currency: 'MMK',
+                currencyDisplay: 'symbol',
+              }).format(decimal);
+            }
+
+            const kyat = Math.floor(decimal);
+            const pya = Math.round((decimal - kyat) * 100);
+
+            if (pya === 0) {
+              return `${kyat} Ks`;
+            }
+
+            return `${kyat} Ks ${pya} pya`;
+          },
+        };
+
+        return {
+          massConvertor,
+          lengthConvertor,
+          volumeConvertor,
+          moneyConvertor,
+        };
+      };
+
+      // Initialize the simulated package
+      const { massConvertor, lengthConvertor, volumeConvertor, moneyConvertor } = simulatePackage();
+
+      // Add error display elements to all converters
+      document.querySelectorAll('.converter').forEach((converter) => {
+        if (!converter.querySelector('.error')) {
+          const errorDiv = document.createElement('div');
+          errorDiv.className = 'error';
+          errorDiv.style.color = 'red';
+          errorDiv.style.marginTop = '10px';
+          converter.appendChild(errorDiv);
+        }
+      });
+
+      // Helper function to safely perform conversion
+      const safeConvert = (converter, value, from, to, resultElement, errorElement, isMetric) => {
+        try {
+          // Clear previous errors
+          errorElement.textContent = '';
+
+          // Check if the unit exists in the data
+          if (from !== 'gram' && from !== 'meter' && from !== 'liter' && !converter.data[from]) {
+            throw new Error(`Unknown unit: ${from}`);
+          }
+
+          if (to !== 'gram' && to !== 'meter' && to !== 'liter' && !converter.data[to]) {
+            throw new Error(`Unknown unit: ${to}`);
+          }
+
+          // Update settings first
+          converter.updateSettings({
+            decimal: 2,
+            from: from,
+            to: to,
+          });
+
+          // Then perform conversion
+          const result = isMetric
+            ? converter.metric2Burmese(value)
+            : converter.burmese2Metric(value);
+
+          if (isNaN(result.value)) {
+            throw new Error('Conversion resulted in an invalid number. Check your units.');
+          }
+
+          resultElement.textContent = `${value} ${from} = ${result.value} ${to}`;
+        } catch (error) {
+          errorElement.textContent = `Error: ${error.message}`;
+          resultElement.textContent = 'Conversion failed';
+        }
+      };
+
+      // Set up event listeners
+      document.getElementById('mass-convert').addEventListener('click', () => {
+        const value = parseFloat(document.getElementById('mass-value').value);
+        const from = document.getElementById('mass-from').value;
+        const to = document.getElementById('mass-to').value;
+        const resultElement = document.getElementById('mass-result');
+        const errorElement =
+          document.querySelector('#mass-convert').parentNode.querySelector('.error') ||
+          document.createElement('div');
+
+        if (isNaN(value)) {
+          errorElement.textContent = 'Please enter a valid number';
+          resultElement.textContent = '';
+          return;
+        }
+
+        safeConvert(massConvertor, value, from, to, resultElement, errorElement, from === 'gram');
+      });
+
+      document.getElementById('length-convert').addEventListener('click', () => {
+        const value = parseFloat(document.getElementById('length-value').value);
+        const from = document.getElementById('length-from').value;
+        const to = document.getElementById('length-to').value;
+        const resultElement = document.getElementById('length-result');
+        const errorElement =
+          document.getElementById('length-error') ||
+          document.querySelector('#length-convert').parentNode.querySelector('.error') ||
+          document.createElement('div');
+
+        if (isNaN(value)) {
+          errorElement.textContent = 'Please enter a valid number';
+          resultElement.textContent = '';
+          return;
+        }
+
+        safeConvert(
+          lengthConvertor,
+          value,
+          from,
+          to,
+          resultElement,
+          errorElement,
+          from === 'meter'
+        );
+      });
+
+      document.getElementById('volume-convert').addEventListener('click', () => {
+        const value = parseFloat(document.getElementById('volume-value').value);
+        const from = document.getElementById('volume-from').value;
+        const to = document.getElementById('volume-to').value;
+        const resultElement = document.getElementById('volume-result');
+        const errorElement =
+          document.querySelector('#volume-convert').parentNode.querySelector('.error') ||
+          document.createElement('div');
+
+        if (isNaN(value)) {
+          errorElement.textContent = 'Please enter a valid number';
+          resultElement.textContent = '';
+          return;
+        }
+
+        safeConvert(
+          volumeConvertor,
+          value,
+          from,
+          to,
+          resultElement,
+          errorElement,
+          from === 'liter'
+        );
+      });
+
+      document.getElementById('money-convert').addEventListener('click', () => {
+        const kyat = parseInt(document.getElementById('money-kyat').value);
+        const pya = parseInt(document.getElementById('money-pya').value);
+        const locale = document.getElementById('money-locale').value;
+        const resultElement = document.getElementById('money-result');
+        const errorElement =
+          document.querySelector('#money-convert').parentNode.querySelector('.error') ||
+          document.createElement('div');
+
+        if (isNaN(kyat) || isNaN(pya)) {
+          errorElement.textContent = 'Please enter valid numbers';
+          resultElement.textContent = '';
+          return;
+        }
+
+        try {
+          // Clear previous errors
+          errorElement.textContent = '';
+
+          // Validate inputs
+          if (kyat < 0 || pya < 0 || pya > 99) {
+            throw new Error('Kyat must be positive and pya must be between 0-99');
+          }
+
+          // Update settings first
+          moneyConvertor.updateSettings({
+            format: {
+              localize: true,
+              locale: locale,
+            },
+          });
+
+          // Then perform conversion
+          const result = moneyConvertor.kyatPya2Decimal(kyat, pya);
+
+          if (!result.formatted) {
+            throw new Error('Formatting failed. Check your locale settings.');
+          }
+
+          resultElement.textContent = result.formatted;
+        } catch (error) {
+          errorElement.textContent = `Error: ${error.message}`;
+          resultElement.textContent = 'Formatting failed';
+        }
+      });
+    </script>
+  </body>
+</html>

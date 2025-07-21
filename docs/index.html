@@ -1,0 +1,572 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Documentation for the Burmese Measure library - a comprehensive conversion package for Burmese measurement units and the metric system"
+    />
+    <title>Burmese Measure - Documentation</title>
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <a href="index.html" class="header-logo">Burmese Measure</a>
+      <nav class="header-nav">
+        <a href="index.html" class="active">Documentation</a>
+        <a href="demo.html">Demo</a>
+        <a href="https://github.com/waiphyo285/burmese-measure" target="_blank">GitHub</a>
+      </nav>
+    </header>
+
+    <button class="menu-toggle">Documentation Menu</button>
+
+    <div class="container">
+      <div class="sidebar">
+        <h3>Contents</h3>
+        <ul>
+          <li><a href="#introduction">Introduction</a></li>
+          <li><a href="#installation">Installation</a></li>
+          <li><a href="#quick-start">Quick Start</a></li>
+          <li>
+            <div class="menu-item has-submenu">API Reference</div>
+            <ul class="submenu">
+              <li><a href="#mass-converter">Mass Converter</a></li>
+              <li><a href="#length-converter">Length Converter</a></li>
+              <li><a href="#volume-converter">Volume Converter</a></li>
+              <li><a href="#money-converter">Money Converter</a></li>
+            </ul>
+          </li>
+          <li>
+            <div class="menu-item has-submenu">Advanced Usage</div>
+            <ul class="submenu">
+              <li><a href="#global-settings">Global Settings</a></li>
+              <li><a href="#updating-data">Updating Data</a></li>
+              <li><a href="#batch-conversion">Batch Conversion</a></li>
+            </ul>
+          </li>
+          <li><a href="#cli">Command Line Interface</a></li>
+          <li>
+            <div class="menu-item has-submenu">Burmese Units</div>
+            <ul class="submenu">
+              <li><a href="#burmese-units">Overview</a></li>
+              <li><a href="#mass-units">Mass Units</a></li>
+              <li><a href="#length-units">Length Units</a></li>
+              <li><a href="#volume-units">Volume Units</a></li>
+              <li><a href="#money-units">Money Units</a></li>
+            </ul>
+          </li>
+        </ul>
+        <a href="demo.html" class="demo-link">Try the Demo</a>
+      </div>
+
+      <div class="content">
+        <section id="introduction">
+          <h2>Introduction</h2>
+          <p>
+            Burmese Measure is a comprehensive conversion package for Burmese measurement units and
+            the metric system. This package provides easy-to-use converters for mass, length,
+            volume, and money units with both programmatic and command-line interfaces.
+          </p>
+          <p>
+            The library is designed to be simple to use while providing powerful features for
+            developers who need to work with traditional Burmese units of measurement.
+          </p>
+        </section>
+
+        <section id="installation">
+          <h2>Installation</h2>
+          <p>You can install the package using npm, yarn, or pnpm:</p>
+
+          <pre><code># Using npm
+npm install burmese-measure
+
+# Using yarn
+yarn add burmese-measure
+
+# Using pnpm
+pnpm add burmese-measure</code></pre>
+        </section>
+
+        <section id="quick-start">
+          <h2>Quick Start</h2>
+
+          <h3>CommonJS</h3>
+          <pre><code>const {
+  massConvertor,
+  lengthConvertor,
+  volumeConvertor,
+  moneyConvertor,
+} = require('burmese-measure');
+
+// Convert 100 grams to kyatThar
+const result = massConvertor.metric2Burmese(100);
+console.log(`100 grams = ${result.value} kyatThar`);
+
+// Convert 5 kyat 3 pae to grams
+const gramResult = massConvertor.kyatPae2Gram(5, 3);
+console.log(`5 kyat 3 pae = ${gramResult.value} grams`);</code></pre>
+
+          <h3>ES Modules</h3>
+          <pre><code>import { massConvertor, lengthConvertor, volumeConvertor, moneyConvertor } from 'burmese-measure';
+
+// Convert 2 meters to lan
+const result = lengthConvertor.metric2Burmese(2);
+console.log(`2 meters = ${result.value} lan`);
+
+// Format 2.5 meters as taung and let-thit
+const formatted = lengthConvertor.formatMeterAsTaungLetThit(2.5);
+console.log(`2.5 meters = ${formatted}`);</code></pre>
+        </section>
+
+        <section id="api-reference">
+          <h2>API Reference</h2>
+
+          <section id="mass-converter">
+            <h3>Mass Converter</h3>
+            <pre><code>// Basic conversions
+massConvertor.metric2Burmese(value: number): ConversionResult;
+massConvertor.burmese2Metric(value: number): ConversionResult;
+
+// Specialized conversions
+massConvertor.kyatPae2Gram(kyat: number, pae?: number): ConversionResult;
+massConvertor.kyatPaeYway2Gram(kyat: number, pae?: number, yway?: number): ConversionResult;
+massConvertor.gram2KyatPae(gram: number): [kyat: number, pae: number];
+massConvertor.gram2KyatPaeYway(gram: number): [kyat: number, pae: number, yway: number];
+massConvertor.formatGramAsKyatPaeYway(gram: number): string;
+
+// Batch conversions
+massConvertor.batchMetric2Burmese(values: number[]): BatchConversionResult;
+massConvertor.batchBurmese2Metric(values: number[]): BatchConversionResult;
+
+// Configuration
+massConvertor.updateSettings({ decimal: 2, from: 'gram', to: 'kyatThar' });
+massConvertor.updateValues({ kyatThar: 16.5 });</code></pre>
+          </section>
+
+          <section id="length-converter">
+            <h3>Length Converter</h3>
+            <pre><code>// Basic conversions
+lengthConvertor.metric2Burmese(value: number): ConversionResult;
+lengthConvertor.burmese2Metric(value: number): ConversionResult;
+
+// Specialized conversions
+lengthConvertor.taungLetThit2Meter(taung: number, letThit?: number): ConversionResult;
+lengthConvertor.meter2TaungLetThit(meter: number): [taung: number, letThit: number];
+lengthConvertor.formatMeterAsTaungLetThit(meter: number): string;
+
+// Batch conversions
+lengthConvertor.batchMetric2Burmese(values: number[]): BatchConversionResult;
+lengthConvertor.batchBurmese2Metric(values: number[]): BatchConversionResult;
+
+// Configuration
+lengthConvertor.updateSettings({ decimal: 2, from: 'meter', to: 'taung' });
+lengthConvertor.updateValues({ taung: 0.46 });</code></pre>
+          </section>
+
+          <section id="volume-converter">
+            <h3>Volume Converter</h3>
+            <pre><code>// Basic conversions
+volumeConvertor.metric2Burmese(value: number): ConversionResult;
+volumeConvertor.burmese2Metric(value: number): ConversionResult;
+
+// Specialized conversions
+volumeConvertor.pyiSaLe2Liter(pyi: number, saLe?: number): ConversionResult;
+volumeConvertor.liter2PyiSaLe(liter: number): [pyi: number, saLe: number];
+volumeConvertor.formatLiterAsPyiSaLe(liter: number): string;
+
+// Batch conversions
+volumeConvertor.batchMetric2Burmese(values: number[]): BatchConversionResult;
+volumeConvertor.batchBurmese2Metric(values: number[]): BatchConversionResult;
+
+// Configuration
+volumeConvertor.updateSettings({ decimal: 2, from: 'liter', to: 'pyi' });
+volumeConvertor.updateValues({ pyi: 2.6 });</code></pre>
+          </section>
+
+          <section id="money-converter">
+            <h3>Money Converter</h3>
+            <pre><code>// Specialized conversions
+moneyConvertor.kyatPya2Decimal(kyat: number, pya?: number): ConversionResult;
+moneyConvertor.decimal2KyatPya(decimal: number): [kyat: number, pya: number];
+moneyConvertor.formatDecimalAsKyatPya(decimal: number): string;
+
+// Configuration
+moneyConvertor.updateSettings({
+  decimal: 2,
+  format: {
+    localize: true,
+    locale: 'my-MM'
+  }
+});</code></pre>
+          </section>
+        </section>
+
+        <section id="advanced-usage">
+          <h2>Advanced Usage</h2>
+
+          <section id="global-settings">
+            <h3>Global Settings and Data</h3>
+            <p>
+              The library uses a global approach for both settings and conversion data. Instead of
+              passing settings or custom data to each conversion method, you should update the
+              global settings and data first and then perform conversions:
+            </p>
+
+            <pre><code>// Update global settings for the converter
+massConvertor.updateSettings({
+  decimal: 2, // Number of decimal places in results
+  from: 'gram', // Source unit
+  to: 'paeThar', // Target unit
+  format: {
+    includeUnit: true, // Include unit symbol in formatted output
+    localize: false, // Use localized number formatting
+    locale: 'en-US', // Locale for number formatting (if localize is true)
+  },
+});
+
+// Now all conversions will use these settings
+const result = massConvertor.metric2Burmese(100);
+console.log(`100 grams = ${result.formatted}`); // Uses the format settings above</code></pre>
+
+            <div class="note">
+              <strong>Note:</strong> This approach makes the API cleaner and more consistent by
+              separating configuration from operation. It also prevents inconsistencies that could
+              occur when passing different settings to different methods.
+            </div>
+          </section>
+
+          <section id="updating-data">
+            <h3>Updating Conversion Data</h3>
+            <p>
+              If you need to use custom conversion factors, you can update the global data using the
+              <code>updateValues</code> method:
+            </p>
+
+            <pre><code>// If you need to update conversion data (e.g., for custom conversion factors)
+massConvertor.updateValues({
+  kyatThar: 16.5, // Custom value for kyatThar in grams
+  paeThar: 1.03125, // Custom value for paeThar in grams
+});
+
+// All subsequent conversions will use the updated data
+const customResult = massConvertor.metric2Burmese(100);
+console.log(`100 grams with custom data = ${customResult.formatted}`);</code></pre>
+          </section>
+
+          <section id="batch-conversion">
+            <h3>Batch Conversion</h3>
+            <p>For converting multiple values at once, you can use the batch conversion methods:</p>
+
+            <pre><code>// Convert multiple values at once
+const batchResult = lengthConvertor.batchMetric2Burmese([1, 2, 3, 4, 5]);
+
+// Process results
+batchResult.results.forEach((result) => {
+  console.log(`${result.originalValue} ${result.fromUnit} = ${result.value} ${result.toUnit}`);
+});
+
+// Get summary
+console.log(
+  `Converted ${batchResult.summary.count} values from ${batchResult.summary.fromUnit} to ${batchResult.summary.toUnit}`
+);</code></pre>
+          </section>
+        </section>
+
+        <section id="cli">
+          <h2>Command Line Interface</h2>
+          <p>The package includes a CLI for quick conversions from the terminal:</p>
+
+          <pre><code># List available units
+npx burmese-measure list mass
+npx burmese-measure list length
+npx burmese-measure list volume
+npx burmese-measure list money
+
+# Mass conversion utilities
+npx burmese-measure mass --kyat 5 --pae 3 --format
+npx burmese-measure mass --gram 100 --format
+
+# Length conversion utilities
+npx burmese-measure length --taung 5 --letthit 12 --format
+npx burmese-measure length --meter 2.5 --format
+
+# Volume conversion utilities
+npx burmese-measure volume --pyi 5 --sale 2 --format
+npx burmese-measure volume --liter 13.5 --format
+
+# Money conversion utilities
+npx burmese-measure money --kyat 5 --pya 50 --format
+npx burmese-measure money --decimal 5.5 --format --locale en-US</code></pre>
+        </section>
+
+        <section id="burmese-units">
+          <h2>Burmese Measurement Units</h2>
+
+          <h3>Mass Units</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Burmese unit</th>
+                <th>Metric equivalent (grams)</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>ywayLay</td>
+                <td>0.136078</td>
+                <td>Smallest mass unit</td>
+              </tr>
+              <tr>
+                <td>ywayGyi</td>
+                <td>0.272155</td>
+                <td>Double of ywayLay</td>
+              </tr>
+              <tr>
+                <td>paeThar</td>
+                <td>1.02058</td>
+                <td>1/16 of kyatThar</td>
+              </tr>
+              <tr>
+                <td>muThar</td>
+                <td>2.04117</td>
+                <td>1/8 of kyatThar</td>
+              </tr>
+              <tr>
+                <td>matThar</td>
+                <td>4.08233</td>
+                <td>1/4 of kyatThar</td>
+              </tr>
+              <tr>
+                <td>kyatThar</td>
+                <td>16.3293</td>
+                <td>Standard mass unit</td>
+              </tr>
+              <tr>
+                <td>pateThar</td>
+                <td>1632.93</td>
+                <td>100 kyatThar</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Length Units</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Burmese unit</th>
+                <th>Metric equivalent (meters)</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>sanchi</td>
+                <td>0.000079375</td>
+                <td>Smallest length unit</td>
+              </tr>
+              <tr>
+                <td>hnan</td>
+                <td>0.00079375</td>
+                <td>10 sanchi</td>
+              </tr>
+              <tr>
+                <td>muyaw</td>
+                <td>0.0047625</td>
+                <td>6 hnan</td>
+              </tr>
+              <tr>
+                <td>letThit</td>
+                <td>0.01905</td>
+                <td>4 muyaw, 1/24 of taung</td>
+              </tr>
+              <tr>
+                <td>maik</td>
+                <td>0.1524</td>
+                <td>8 letThit</td>
+              </tr>
+              <tr>
+                <td>htwa</td>
+                <td>0.2286</td>
+                <td>1.5 maik, 1/2 of taung</td>
+              </tr>
+              <tr>
+                <td>taung</td>
+                <td>0.4572</td>
+                <td>Standard length unit</td>
+              </tr>
+              <tr>
+                <td>lan</td>
+                <td>1.8288</td>
+                <td>4 taung</td>
+              </tr>
+              <tr>
+                <td>ta</td>
+                <td>3.2004</td>
+                <td>7 taung</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Volume Units</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Burmese unit</th>
+                <th>Metric equivalent (liters)</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>laMyu</td>
+                <td>0.0799118</td>
+                <td>Smallest volume unit</td>
+              </tr>
+              <tr>
+                <td>laMyet</td>
+                <td>0.159824</td>
+                <td>2 laMyu</td>
+              </tr>
+              <tr>
+                <td>laMe</td>
+                <td>0.319647</td>
+                <td>2 laMyet</td>
+              </tr>
+              <tr>
+                <td>saLe</td>
+                <td>0.639294</td>
+                <td>2 laMe, 1/4 of pyi</td>
+              </tr>
+              <tr>
+                <td>hkwet</td>
+                <td>1.27859</td>
+                <td>2 saLe, 1/2 of pyi</td>
+              </tr>
+              <tr>
+                <td>pyi</td>
+                <td>2.55718</td>
+                <td>Standard volume unit</td>
+              </tr>
+              <tr>
+                <td>seit</td>
+                <td>10.2287</td>
+                <td>4 pyi</td>
+              </tr>
+              <tr>
+                <td>hkwe</td>
+                <td>20.4574</td>
+                <td>2 seit, 8 pyi</td>
+              </tr>
+              <tr>
+                <td>tin</td>
+                <td>40.9148</td>
+                <td>2 hkwe, 16 pyi</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Money Units</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Burmese unit</th>
+                <th>Value (in kyat)</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>pya</td>
+                <td>0.01</td>
+                <td>1/100 of kyat</td>
+              </tr>
+              <tr>
+                <td>mu</td>
+                <td>0.1</td>
+                <td>1/10 of kyat</td>
+              </tr>
+              <tr>
+                <td>mat</td>
+                <td>0.25</td>
+                <td>1/4 of kyat</td>
+              </tr>
+              <tr>
+                <td>kyat</td>
+                <td>1</td>
+                <td>Standard currency unit</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-links">
+        <a href="https://github.com/waiphyo285/burmese-measure" target="_blank">GitHub</a>
+        <a href="index.html">Documentation</a>
+        <a href="demo.html">Demo</a>
+      </div>
+      <p>© 2021-2025 Wai Phyo Naing</p>
+    </div>
+
+    <script>
+      // Mobile menu toggle functionality
+      document.addEventListener('DOMContentLoaded', function () {
+        const menuToggle = document.querySelector('.menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
+
+        if (menuToggle && sidebar) {
+          menuToggle.addEventListener('click', function () {
+            sidebar.classList.toggle('active');
+            menuToggle.textContent = sidebar.classList.contains('active')
+              ? 'Hide Menu'
+              : 'Documentation Menu';
+          });
+        }
+
+        // Submenu functionality
+        const menuItems = document.querySelectorAll('.menu-item.has-submenu');
+
+        menuItems.forEach((item) => {
+          item.addEventListener('click', function () {
+            // Toggle active class on the clicked menu item
+            this.classList.toggle('active');
+
+            // Toggle the submenu visibility
+            const submenu = this.nextElementSibling;
+            if (submenu && submenu.classList.contains('submenu')) {
+              submenu.classList.toggle('active');
+            }
+          });
+        });
+
+        // Auto-expand submenu if a child link is the current page anchor
+        function checkCurrentSection() {
+          const hash = window.location.hash;
+          if (hash) {
+            const targetLink = document.querySelector(`a[href="${hash}"]`);
+            if (targetLink) {
+              // Find parent submenu
+              const parentSubmenu = targetLink.closest('.submenu');
+              if (parentSubmenu) {
+                parentSubmenu.classList.add('active');
+                const parentMenuItem = parentSubmenu.previousElementSibling;
+                if (parentMenuItem && parentMenuItem.classList.contains('menu-item')) {
+                  parentMenuItem.classList.add('active');
+                }
+              }
+            }
+          }
+        }
+
+        // Check on page load and when hash changes
+        checkCurrentSection();
+        window.addEventListener('hashchange', checkCurrentSection);
+      });
+    </script>
+  </body>
+</html>

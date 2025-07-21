@@ -283,7 +283,7 @@ interface Money {
 /**
  * Union type for all unit data types
  */
-type UData = Mass | Volume | Money | Length;
+type BMU = Mass | Volume | Money | Length;
 /**
  * Result of a conversion operation with formatted output
  */
@@ -318,9 +318,89 @@ interface BatchConversionResult {
 type MeasurementCategory = 'mass' | 'length' | 'volume' | 'money';
 
 /**
+ * Exchanges the 'from' and 'to' units in the settings object
+ * @param setting - The original settings object
+ * @returns A new settings object with swapped units
+ */
+declare const exchangeUnit: (setting: Setting) => Setting;
+/**
+ * Validates that the input is a number
+ * @param value - The value to validate
+ * @param errorMessage - Custom error message
+ * @throws Error if value is not a number
+ */
+declare const validateNumber: (value: any, errorMessage?: string) => void;
+/**
+ * Validates that all inputs in an array are numbers
+ * @param values - Array of values to validate
+ * @throws Error if any value is not a number
+ */
+declare const validateNumberArray: (values: any[]) => void;
+/**
+ * Formats a number according to the specified options
+ * @param value - The number to format
+ * @param unit - The unit symbol to append (optional)
+ * @param options - Formatting options
+ * @returns Formatted string
+ */
+declare const formatNumber: (value: number, unit?: string, options?: FormatOptions) => string;
+/**
+ * Creates a conversion result object
+ * @param value - The converted value
+ * @param originalValue - The original input value
+ * @param fromUnit - Source unit
+ * @param toUnit - Target unit
+ * @param options - Formatting options
+ * @returns A ConversionResult object
+ */
+declare const createConversionResult: (value: number, originalValue: number, fromUnit: string, toUnit: string, options?: FormatOptions) => ConversionResult;
+/**
+ * Creates a batch conversion result object
+ * @param results - Array of individual conversion results
+ * @param fromUnit - Source unit
+ * @param toUnit - Target unit
+ * @returns A BatchConversionResult object
+ */
+declare const createBatchResult: (results: ConversionResult[], fromUnit: string, toUnit: string) => BatchConversionResult;
+/**
+ * Gets the default unit for a measurement category
+ * @param category - The measurement category
+ * @returns The default unit for the category
+ */
+declare const getDefaultUnit: (category: MeasurementCategory) => string;
+/**
+ * Rounds a number to the specified number of decimal places
+ * @param value - The number to round
+ * @param decimals - Number of decimal places
+ * @returns Rounded number
+ */
+declare const roundToDecimals: (value: number, decimals: number) => number;
+
+declare const helpers_createBatchResult: typeof createBatchResult;
+declare const helpers_createConversionResult: typeof createConversionResult;
+declare const helpers_exchangeUnit: typeof exchangeUnit;
+declare const helpers_formatNumber: typeof formatNumber;
+declare const helpers_getDefaultUnit: typeof getDefaultUnit;
+declare const helpers_roundToDecimals: typeof roundToDecimals;
+declare const helpers_validateNumber: typeof validateNumber;
+declare const helpers_validateNumberArray: typeof validateNumberArray;
+declare namespace helpers {
+  export {
+    helpers_createBatchResult as createBatchResult,
+    helpers_createConversionResult as createConversionResult,
+    helpers_exchangeUnit as exchangeUnit,
+    helpers_formatNumber as formatNumber,
+    helpers_getDefaultUnit as getDefaultUnit,
+    helpers_roundToDecimals as roundToDecimals,
+    helpers_validateNumber as validateNumber,
+    helpers_validateNumberArray as validateNumberArray,
+  };
+}
+
+/**
  * Base abstract class for all unit converters
  */
-declare abstract class Convertor<T extends UData> {
+declare abstract class Convertor<T extends BMU> {
     protected data: T;
     protected setting: Setting;
     protected symbols: Record<string, string>;
@@ -341,35 +421,27 @@ declare abstract class Convertor<T extends UData> {
     /**
      * Converts a value from metric to Burmese units
      * @param value - Value to convert
-     * @param customData - Optional custom conversion data
-     * @param customSetting - Optional custom settings
      * @returns Conversion result
      */
-    metric2Burmese(value: number, customData?: Partial<T>, customSetting?: Partial<Setting>): ConversionResult;
+    metric2Burmese(value: number): ConversionResult;
     /**
      * Converts a value from Burmese to metric units
      * @param value - Value to convert
-     * @param customData - Optional custom conversion data
-     * @param customSetting - Optional custom settings
      * @returns Conversion result
      */
-    burmese2Metric(value: number, customData?: Partial<T>, customSetting?: Partial<Setting>): ConversionResult;
+    burmese2Metric(value: number): ConversionResult;
     /**
      * Converts a batch of values from metric to Burmese units
      * @param values - Array of values to convert
-     * @param customData - Optional custom conversion data
-     * @param customSetting - Optional custom settings
      * @returns Batch conversion result
      */
-    batchMetric2Burmese(values: number[], customData?: Partial<T>, customSetting?: Partial<Setting>): BatchConversionResult;
+    batchMetric2Burmese(values: number[]): BatchConversionResult;
     /**
      * Converts a batch of values from Burmese to metric units
      * @param values - Array of values to convert
-     * @param customData - Optional custom conversion data
-     * @param customSetting - Optional custom settings
      * @returns Batch conversion result
      */
-    batchBurmese2Metric(values: number[], customData?: Partial<T>, customSetting?: Partial<Setting>): BatchConversionResult;
+    batchBurmese2Metric(values: number[]): BatchConversionResult;
     /**
      * Gets the symbol for a unit
      * @param unit - Unit name
@@ -384,10 +456,10 @@ declare abstract class Convertor<T extends UData> {
     updateSettings(newSettings: Partial<Setting>): this;
     /**
      * Updates the converter data
-     * @param newData - New data to apply
+     * @param newValues - New values to apply
      * @returns This converter instance for chaining
      */
-    updateData(newData: Partial<T>): this;
+    updateValues(newValues: Partial<T>): this;
 }
 /**
  * Mass converter for Burmese mass units
@@ -404,45 +476,35 @@ declare class MassConvertor extends Convertor<Mass> {
      * Converts kyat and pae to grams
      * @param kyat - Number of kyat
      * @param pae - Number of pae (1/16 of kyat)
-     * @param customData - Optional custom conversion data
-     * @param customSetting - Optional custom settings
      * @returns Conversion result in grams
      */
-    kyatPae2Gram(kyat: number, pae?: number, customData?: Partial<Mass>, customSetting?: Partial<Setting>): ConversionResult;
+    kyatPae2Gram(kyat: number, pae?: number): ConversionResult;
     /**
      * Converts kyat, pae, and yway to grams
      * @param kyat - Number of kyat
      * @param pae - Number of pae (1/16 of kyat)
      * @param yway - Number of yway (1/8 of pae, 1/128 of kyat)
-     * @param customData - Optional custom conversion data
-     * @param customSetting - Optional custom settings
      * @returns Conversion result in grams
      */
-    kyatPaeYway2Gram(kyat: number, pae?: number, yway?: number, customData?: Partial<Mass>, customSetting?: Partial<Setting>): ConversionResult;
+    kyatPaeYway2Gram(kyat: number, pae?: number, yway?: number): ConversionResult;
     /**
      * Converts grams to kyat and pae
      * @param gram - Number of grams
-     * @param customData - Optional custom conversion data
-     * @param customSetting - Optional custom settings
      * @returns Array with [kyat, pae]
      */
-    gram2KyatPae(gram: number, customData?: Partial<Mass>, customSetting?: Partial<Setting>): number[];
+    gram2KyatPae(gram: number): number[];
     /**
      * Converts grams to kyat, pae, and yway
      * @param gram - Number of grams
-     * @param customData - Optional custom conversion data
-     * @param customSetting - Optional custom settings
      * @returns Array with [kyat, pae, yway]
      */
-    gram2KyatPaeYway(gram: number, customData?: Partial<Mass>, customSetting?: Partial<Setting>): number[];
+    gram2KyatPaeYway(gram: number): number[];
     /**
      * Formats a gram value as kyat, pae, and yway
      * @param gram - Number of grams
-     * @param customData - Optional custom conversion data
-     * @param customSetting - Optional custom settings
      * @returns Formatted string (e.g., "5 kyat 3 pae 2 yway")
      */
-    formatGramAsKyatPaeYway(gram: number, customData?: Partial<Mass>, customSetting?: Partial<Setting>): string;
+    formatGramAsKyatPaeYway(gram: number): string;
 }
 /**
  * Length converter for Burmese length units
@@ -459,27 +521,21 @@ declare class LengthConvertor extends Convertor<Length> {
      * Converts taung and let-thit to meters
      * @param taung - Number of taung
      * @param letThit - Number of let-thit (1/24 of taung)
-     * @param customData - Optional custom conversion data
-     * @param customSetting - Optional custom settings
      * @returns Conversion result in meters
      */
-    taungLetThit2Meter(taung: number, letThit?: number, customData?: Partial<Length>, customSetting?: Partial<Setting>): ConversionResult;
+    taungLetThit2Meter(taung: number, letThit?: number): ConversionResult;
     /**
      * Converts meters to taung and let-thit
      * @param meter - Number of meters
-     * @param customData - Optional custom conversion data
-     * @param customSetting - Optional custom settings
      * @returns Array with [taung, letThit]
      */
-    meter2TaungLetThit(meter: number, customData?: Partial<Length>, customSetting?: Partial<Setting>): number[];
+    meter2TaungLetThit(meter: number): number[];
     /**
      * Formats a meter value as taung and let-thit
      * @param meter - Number of meters
-     * @param customData - Optional custom conversion data
-     * @param customSetting - Optional custom settings
      * @returns Formatted string (e.g., "5 taung 3 let thit")
      */
-    formatMeterAsTaungLetThit(meter: number, customData?: Partial<Length>, customSetting?: Partial<Setting>): string;
+    formatMeterAsTaungLetThit(meter: number): string;
 }
 /**
  * Volume converter for Burmese volume units
@@ -496,27 +552,21 @@ declare class VolumeConvertor extends Convertor<Volume> {
      * Converts pyi and sa-le to liters
      * @param pyi - Number of pyi
      * @param saLe - Number of sa-le (1/4 of pyi)
-     * @param customData - Optional custom conversion data
-     * @param customSetting - Optional custom settings
      * @returns Conversion result in liters
      */
-    pyiSaLe2Liter(pyi: number, saLe?: number, customData?: Partial<Volume>, customSetting?: Partial<Setting>): ConversionResult;
+    pyiSaLe2Liter(pyi: number, saLe?: number): ConversionResult;
     /**
      * Converts liters to pyi and sa-le
      * @param liter - Number of liters
-     * @param customData - Optional custom conversion data
-     * @param customSetting - Optional custom settings
      * @returns Array with [pyi, saLe]
      */
-    liter2PyiSaLe(liter: number, customData?: Partial<Volume>, customSetting?: Partial<Setting>): number[];
+    liter2PyiSaLe(liter: number): number[];
     /**
      * Formats a liter value as pyi and sa-le
      * @param liter - Number of liters
-     * @param customData - Optional custom conversion data
-     * @param customSetting - Optional custom settings
      * @returns Formatted string (e.g., "5 pyi 2 sa le")
      */
-    formatLiterAsPyiSaLe(liter: number, customData?: Partial<Volume>, customSetting?: Partial<Setting>): string;
+    formatLiterAsPyiSaLe(liter: number): string;
 }
 /**
  * Money converter for Burmese currency units
@@ -533,27 +583,21 @@ declare class MoneyConvertor extends Convertor<Money> {
      * Converts kyat and pya to decimal kyat
      * @param kyat - Number of kyat
      * @param pya - Number of pya (1/100 of kyat)
-     * @param _customData - Optional custom conversion data (unused)
-     * @param customSetting - Optional custom settings
      * @returns Conversion result in decimal kyat
      */
-    kyatPya2Decimal(kyat: number, pya?: number, _customData?: Partial<Money>, customSetting?: Partial<Setting>): ConversionResult;
+    kyatPya2Decimal(kyat: number, pya?: number): ConversionResult;
     /**
      * Converts decimal kyat to kyat and pya
      * @param decimal - Decimal kyat amount
-     * @param _customData - Optional custom conversion data (unused)
-     * @param _customSetting - Optional custom settings (unused)
      * @returns Array with [kyat, pya]
      */
-    decimal2KyatPya(decimal: number, _customData?: Partial<Money>, _customSetting?: Partial<Setting>): number[];
+    decimal2KyatPya(decimal: number): number[];
     /**
      * Formats a decimal kyat value as kyat and pya
      * @param decimal - Decimal kyat amount
-     * @param _customData - Optional custom conversion data (unused)
-     * @param customSetting - Optional custom settings
      * @returns Formatted string (e.g., "5 Ks 50 pya" or "5.50 Ks")
      */
-    formatDecimalAsKyatPya(decimal: number, _customData?: Partial<Money>, customSetting?: Partial<Setting>): string;
+    formatDecimalAsKyatPya(decimal: number): string;
 }
 declare const massConvertor: MassConvertor;
 declare const lengthConvertor: LengthConvertor;
@@ -566,4 +610,4 @@ declare const moneyConvertor: MoneyConvertor;
  */
 declare const createConverter: (category: MeasurementCategory) => Convertor<any>;
 
-export { Convertor, LENGTH, LengthConvertor, MASS, MONEY, MassConvertor, MoneyConvertor, VOLUME, VolumeConvertor, createConverter, lengthConvertor, massConvertor, moneyConvertor, volumeConvertor };
+export { Convertor, LENGTH, LengthConvertor, MASS, MONEY, MassConvertor, MoneyConvertor, VOLUME, VolumeConvertor, createConverter, helpers, lengthConvertor, massConvertor, moneyConvertor, volumeConvertor };
