@@ -200,12 +200,12 @@ export const MONEY = {
 
 // Export all constants
 export default {
-  $massSettings: MASS.settings,
   $massData: MASS.data,
-  $lengthSettings: LENGTH.settings,
+  $massSettings: MASS.settings,
   $lengthData: LENGTH.data,
-  $volumeSettings: VOLUME.settings,
+  $lengthSettings: LENGTH.settings,
   $volumeData: VOLUME.data,
-  $moneySettings: MONEY.settings,
+  $volumeSettings: VOLUME.settings,
   $moneyData: MONEY.data,
+  $moneySettings: MONEY.settings,
 };

@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Burmese Measure - Demo</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    h1 {
+      color: #333;
+      text-align: center;
+    }
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+    .converter {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      width: 300px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .converter h2 {
+      margin-top: 0;
+      color: #444;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      width: 100%;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 4px;
+      min-height: 20px;
+    }
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Burmese Measure Converter</h1>
+  
+  <div class="container">
+    <!-- Mass Converter -->
+    <div class="converter">
+      <h2>Mass Converter</h2>
+      <div class="form-group">
+        <label for="mass-value">Value:</label>
+        <input type="number" id="mass-value" step="0.01" value="100">
+      </div>
+      <div class="form-group">
+        <label for="mass-from">From:</label>
+        <select id="mass-from">
+          <option value="gram">Gram (g)</option>
+          <option value="kyat_thar">Kyat</option>
+          <option value="pae_thar">Pae</option>
+          <option value="yway_gyi">Yway</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="mass-to">To:</label>
+        <select id="mass-to">
+          <option value="kyat_thar">Kyat</option>
+          <option value="gram">Gram (g)</option>
+          <option value="pae_thar">Pae</option>
+          <option value="yway_gyi">Yway</option>
+        </select>
+      </div>
+      <button id="mass-convert">Convert</button>
+      <div class="result" id="mass-result"></div>
+    </div>
+    
+    <!-- Length Converter -->
+    <div class="converter">
+      <h2>Length Converter</h2>
+      <div class="form-group">
+        <label for="length-value">Value:</label>
+        <input type="number" id="length-value" step="0.01" value="1">
+      </div>
+      <div class="form-group">
+        <label for="length-from">From:</label>
+        <select id="length-from">
+          <option value="meter">Meter (m)</option>
+          <option value="taung">Taung</option>
+          <option value="lan">Lan</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="length-to">To:</label>
+        <select id="length-to">
+          <option value="taung">Taung</option>
+          <option value="meter">Meter (m)</option>
+          <option value="lan">Lan</option>
+        </select>
+      </div>
+      <button id="length-convert">Convert</button>
+      <div class="result" id="length-result"></div>
+    </div>
+    
+    <!-- Volume Converter -->
+    <div class="converter">
+      <h2>Volume Converter</h2>
+      <div class="form-group">
+        <label for="volume-value">Value:</label>
+        <input type="number" id="volume-value" step="0.01" value="1">
+      </div>
+      <div class="form-group">
+        <label for="volume-from">From:</label>
+        <select id="volume-from">
+          <option value="liter">Liter (L)</option>
+          <option value="pyi">Pyi</option>
+          <option value="tin">Tin</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="volume-to">To:</label>
+        <select id="volume-to">
+          <option value="pyi">Pyi</option>
+          <option value="liter">Liter (L)</option>
+          <option value="tin">Tin</option>
+        </select>
+      </div>
+      <button id="volume-convert">Convert</button>
+      <div class="result" id="volume-result"></div>
+    </div>
+    
+    <!-- Money Converter -->
+    <div class="converter">
+      <h2>Money Converter</h2>
+      <div class="form-group">
+        <label for="money-kyat">Kyat:</label>
+        <input type="number" id="money-kyat" step="1" value="1000">
+      </div>
+      <div class="form-group">
+        <label for="money-pya">Pya:</label>
+        <input type="number" id="money-pya" step="1" value="50">
+      </div>
+      <div class="form-group">
+        <label for="money-locale">Format Locale:</label>
+        <select id="money-locale">
+          <option value="my-MM">Myanmar (my-MM)</option>
+          <option value="en-US">English (en-US)</option>
+          <option value="th-TH">Thai (th-TH)</option>
+        </select>
+      </div>
+      <button id="money-convert">Format</button>
+      <div class="result" id="money-result"></div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <p>This demo uses the <a href="https://github.com/waiphyo285/burmese-measure" target="_blank">burmese-measure</a> package.</p>
+    <p>© 2021-2025 Wai Phyo Naing</p>
+  </div>
+
+  <script type="module">
+    // In a real application, you would import from the npm package
+    // import { massConvertor, lengthConvertor, volumeConvertor, moneyConvertor } from 'burmese-measure';
+    
+    // For demo purposes, we'll use a placeholder that simulates the package behavior
+    const simulatePackage = () => {
+      const formatNumber = (value, decimals = 6) => {
+        return Number(value.toFixed(decimals));
+      };
+      
+      const massConversions = {
+        'gram_to_kyat_thar': (value) => formatNumber(value * 0.061241),
+        'kyat_thar_to_gram': (value) => formatNumber(value * 16.3293),
+        'gram_to_pae_thar': (value) => formatNumber(value * 0.979883),
+        'pae_thar_to_gram': (value) => formatNumber(value * 1.02058),
+        'gram_to_yway_gyi': (value) => formatNumber(value * 3.67437),
+        'yway_gyi_to_gram': (value) => formatNumber(value * 0.272155),
+        'kyat_thar_to_pae_thar': (value) => formatNumber(value * 16),
+        'pae_thar_to_kyat_thar': (value) => formatNumber(value / 16),
+        'kyat_thar_to_yway_gyi': (value) => formatNumber(value * 60),
+        'yway_gyi_to_kyat_thar': (value) => formatNumber(value / 60),
+        'pae_thar_to_yway_gyi': (value) => formatNumber(value * 3.75),
+        'yway_gyi_to_pae_thar': (value) => formatNumber(value / 3.75),
+      };
+      
+      const lengthConversions = {
+        'meter_to_taung': (value) => formatNumber(value * 2.187664),
+        'taung_to_meter': (value) => formatNumber(value * 0.4572),
+        'meter_to_lan': (value) => formatNumber(value * 0.546807),
+        'lan_to_meter': (value) => formatNumber(value * 1.8288),
+        'taung_to_lan': (value) => formatNumber(value * 0.25),
+        'lan_to_taung': (value) => formatNumber(value * 4),
+      };
+      
+      const volumeConversions = {
+        'liter_to_pyi': (value) => formatNumber(value * 0.391055),
+        'pyi_to_liter': (value) => formatNumber(value * 2.55718),
+        'liter_to_tin': (value) => formatNumber(value * 0.024441),
+        'tin_to_liter': (value) => formatNumber(value * 40.9148),
+        'pyi_to_tin': (value) => formatNumber(value * 0.0625),
+        'tin_to_pyi': (value) => formatNumber(value * 16),
+      };
+      
+      const formatMoney = (kyat, pya, locale = 'my-MM') => {
+        const amount = kyat + (pya / 100);
+        return new Intl.NumberFormat(locale, {
+          style: 'currency',
+          currency: 'MMK',
+          currencyDisplay: 'symbol',
+        }).format(amount);
+      };
+      
+      return {
+        massConvertor: {
+          convert: (value, from, to) => {
+            const key = `${from}_to_${to}`;
+            if (massConversions[key]) {
+              return massConversions[key](value);
+            }
+            return 'Conversion not supported';
+          }
+        },
+        lengthConvertor: {
+          convert: (value, from, to) => {
+            const key = `${from}_to_${to}`;
+            if (lengthConversions[key]) {
+              return lengthConversions[key](value);
+            }
+            return 'Conversion not supported';
+          }
+        },
+        volumeConvertor: {
+          convert: (value, from, to) => {
+            const key = `${from}_to_${to}`;
+            if (volumeConversions[key]) {
+              return volumeConversions[key](value);
+            }
+            return 'Conversion not supported';
+          }
+        },
+        moneyConvertor: {
+          format: (kyat, pya, locale) => {
+            return formatMoney(kyat, pya, locale);
+          }
+        }
+      };
+    };
+    
+    // Initialize the simulated package
+    const { massConvertor, lengthConvertor, volumeConvertor, moneyConvertor } = simulatePackage();
+    
+    // Set up event listeners
+    document.getElementById('mass-convert').addEventListener('click', () => {
+      const value = parseFloat(document.getElementById('mass-value').value);
+      const from = document.getElementById('mass-from').value;
+      const to = document.getElementById('mass-to').value;
+      
+      if (isNaN(value)) {
+        document.getElementById('mass-result').textContent = 'Please enter a valid number';
+        return;
+      }
+      
+      const result = massConvertor.convert(value, from, to);
+      document.getElementById('mass-result').textContent = `${value} ${from} = ${result} ${to}`;
+    });
+    
+    document.getElementById('length-convert').addEventListener('click', () => {
+      const value = parseFloat(document.getElementById('length-value').value);
+      const from = document.getElementById('length-from').value;
+      const to = document.getElementById('length-to').value;
+      
+      if (isNaN(value)) {
+        document.getElementById('length-result').textContent = 'Please enter a valid number';
+        return;
+      }
+      
+      const result = lengthConvertor.convert(value, from, to);
+      document.getElementById('length-result').textContent = `${value} ${from} = ${result} ${to}`;
+    });
+    
+    document.getElementById('volume-convert').addEventListener('click', () => {
+      const value = parseFloat(document.getElementById('volume-value').value);
+      const from = document.getElementById('volume-from').value;
+      const to = document.getElementById('volume-to').value;
+      
+      if (isNaN(value)) {
+        document.getElementById('volume-result').textContent = 'Please enter a valid number';
+        return;
+      }
+      
+      const result = volumeConvertor.convert(value, from, to);
+      document.getElementById('volume-result').textContent = `${value} ${from} = ${result} ${to}`;
+    });
+    
+    document.getElementById('money-convert').addEventListener('click', () => {
+      const kyat = parseInt(document.getElementById('money-kyat').value);
+      const pya = parseInt(document.getElementById('money-pya').value);
+      const locale = document.getElementById('money-locale').value;
+      
+      if (isNaN(kyat) || isNaN(pya)) {
+        document.getElementById('money-result').textContent = 'Please enter valid numbers';
+        return;
+      }
+      
+      const result = moneyConvertor.format(kyat, pya, locale);
+      document.getElementById('money-result').textContent = result;
+    });
+  </script>
+</body>
+</html>
